@@ -80,6 +80,7 @@ def signup_page():
 @app.route('/contact-us-page')
 def contact_us_page():
     return render_template('contact-us.html')
+
 # Blog-related routes
 posts = [
     {
