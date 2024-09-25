@@ -1,0 +1,53 @@
+{
+    "workouts": [
+        {
+            "date": "2024-09-24 10:00:00",
+            "weight": 70.5,
+            "duration": 45,
+            "exercises": ["Pushups", "Squats"],
+            "notes": "Felt strong today, increased squat depth."
+        },
+        {
+            "date": "2024-09-23 08:30:00",
+            "weight": 70.2,
+            "duration": 30,
+            "exercises": ["Lunges", "Plank"],
+            "notes": "Core workout, plank duration increased."
+        },
+        {
+            "date": "2024-09-22 09:15:00",
+            "weight": 70.0,
+            "duration": 60,
+            "exercises": ["Burpees", "Pushups", "Squats"],
+            "notes": "Full body workout, feeling good."
+        },
+        {
+            "date": "2024-09-21 07:45:00",
+            "weight": 69.8,
+            "duration": 50,
+            "exercises": ["Plank", "Burpees"],
+            "notes": "Focused on core and cardio today."
+        },
+        {
+            "date": "2024-09-20 10:15:00",
+            "weight": 69.9,
+            "duration": 35,
+            "exercises": ["Squats", "Lunges"],
+            "notes": "Leg day, increased weight on squats."
+        },
+        {
+            "date": "2024-09-19 08:00:00",
+            "weight": 70.1,
+            "duration": 40,
+            "exercises": ["Pushups", "Burpees"],
+            "notes": "Upper body and cardio, pushed hard."
+        },
+        {
+            "date": "2024-09-18 09:30:00",
+            "weight": 70.3,
+            "duration": 60,
+            "exercises": ["Plank", "Lunges"],
+            "notes": "Good endurance, increased plank time."
+        }
+    ]
+}

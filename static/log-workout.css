@@ -1,80 +1,119 @@
-/* Layout for the workout log section */
+/* Form container inside the log-workout section */
 #log-workout {
+    flex: 1;  /* Ensure the main section takes the available height */
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 30px 0;
+    padding: 50px 0;
     background-color: #f4f4f4;
-  }
-  
-  #log-workout h2 {
-    font-size: 2rem;
-    color: #28a745;
+}
+
+#log-workout .form-container {
+    background-color: #fff;
+    padding: 30px;
+    max-width: 600px;
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Form Header */
+#log-workout h2 {
+    font-size: 2.5rem;
     margin-bottom: 20px;
     text-align: center;
-  }
-  
-  /* Form container styling */
-  #log-workout .container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  /* Input field and label styling */
-  #log-workout label {
-    font-size: 1.1rem;
-    color: #333;
-    margin-bottom: 5px;
-  }
-  
-  #log-workout input[type="number"],
-  #log-workout textarea {
+    color: #28a745;
+}
+
+/* Form Styling */
+#log-workout form label {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+#log-workout form input[type="number"],
+#log-workout form textarea {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;
-  }
-  
-  #log-workout textarea {
+}
+
+#log-workout form textarea {
     resize: none;
-  }
-  
-  /* Exercise checkbox styling */
-  #log-workout .exercise-list {
+}
+
+#log-workout h3 {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+/* Exercise List Styling */
+.exercise-list {
     display: flex;
     flex-direction: column;
-  }
-  
-  #log-workout .exercise-list input[type="checkbox"] {
-    margin-right: 10px;
-  }
-  
-  #log-workout .exercise-list label {
-    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.exercise-item {
+    display: flex;
+    align-items: center;
     margin-bottom: 10px;
+}
+
+.exercise-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    appearance: none;
+    background-color: #fff;
+    border: 2px solid #28a745;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.exercise-item input[type="checkbox"]:checked {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.exercise-item input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    left: 6px;
+    top: 2px;
+}
+
+.exercise-item label {
+    font-size: 1.2rem;
     color: #333;
-  }
-  
-  /* Submit button styling */
-  #log-workout input[type="submit"] {
+}
+
+/* Submit Button Styling */
+#log-workout form input[type="submit"] {
     background-color: #28a745;
     color: white;
-    padding: 10px 20px;
+    border: none;
+    padding: 15px;
+    font-size: 1.2rem;
     border-radius: 5px;
-    font-weight: bold;
-    font-size: 1rem;
     cursor: pointer;
+    width: 100%;
     transition: background-color 0.3s ease;
-  }
-  
-  #log-workout input[type="submit"]:hover {
+}
+
+#log-workout form input[type="submit"]:hover {
     background-color: #218838;
-  }
-  
+}
