@@ -13,12 +13,12 @@ def index():
 def diet_plan_page():
     return render_template('diet-plan.html')
 
-# @app.route('/fitness-plan-page')
-# def fitness_plan_page():
-#     workout_data = [30, 45, 60, 40, 50, 70, 65]
-#     body_measurements = [70, 68, 66, 65]
-#     goal_progress = [75, 25]
-#     return render_template('fitness-plan.html', workout_data=workout_data, body_measurements=body_measurements, goal_progress=goal_progress)
+@app.route('/fitness-plan-page')
+def fitness_plan_page():
+     workout_data = [30, 45, 60, 40, 50, 70, 65]
+     body_measurements = [70, 68, 66, 65]
+     goal_progress = [75, 25]
+     return render_template('fitness-plan.html', workout_data=workout_data, body_measurements=body_measurements, goal_progress=goal_progress)
 
 
 # Load the database
@@ -77,6 +77,9 @@ def login_page():
 def signup_page():
     return render_template('signup.html')
 
+@app.route('/contact-us-page')
+def contact_us_page():
+    return render_template('contact-us.html')
 # Blog-related routes
 posts = [
     {
