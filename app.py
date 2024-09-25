@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
+import json
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -11,19 +13,61 @@ def index():
 def diet_plan_page():
     return render_template('diet-plan.html')
 
-@app.route('/fitness-plan-page')
-def fitness_plan_page():
-    workout_data = [30, 45, 60, 40, 50, 70, 65]
-    body_measurements = [70, 68, 66, 65]
-    goal_progress = [75, 25]
-    return render_template('fitness-plan.html', workout_data=workout_data, body_measurements=body_measurements, goal_progress=goal_progress)
+# @app.route('/fitness-plan-page')
+# def fitness_plan_page():
+#     workout_data = [30, 45, 60, 40, 50, 70, 65]
+#     body_measurements = [70, 68, 66, 65]
+#     goal_progress = [75, 25]
+#     return render_template('fitness-plan.html', workout_data=workout_data, body_measurements=body_measurements, goal_progress=goal_progress)
+
+
+# Load the database
+def load_database():
+    try:
+        with open("database.json", "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return {"workouts": []}
+
+# Save the database
+def save_database(data):
+    with open("database.json", "w") as file:
+        json.dump(data, file, indent=4)
 
 @app.route('/progress-page')
 def progress_page():
-    workout_data = [30, 45, 60, 40, 50, 70, 65]
-    body_measurements = [70, 68, 66, 65]
-    goal_progress = [75, 25]
-    return render_template('progress.html', workout_data=workout_data, body_measurements=body_measurements, goal_progress=goal_progress)
+    database = load_database()
+    workouts = database["workouts"]
+    
+    # Calculate total workout time
+    total_workout_time = sum(workout["duration"] for workout in workouts)
+    
+    # Get the last 7 workouts for the chart
+    recent_workouts = workouts[-7:]
+    workout_data = [workout["duration"] for workout in recent_workouts]
+    
+    # You might want to add more data processing here for body measurements and goal progress
+    
+    return render_template('progress.html', 
+                           total_workout_time=total_workout_time,
+                           workout_data=workout_data,
+                           workouts=workouts)
+
+@app.route('/log-workout', methods=['POST'])
+def log_workout():
+    database = load_database()
+    
+    new_workout = {
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "type": request.form['workout_type'],
+        "duration": int(request.form['duration']),
+    }
+    
+    database["workouts"].append(new_workout)
+    save_database(database)
+    
+    return redirect(url_for('progress-page'))
+
 
 @app.route('/login-page')
 def login_page():
@@ -32,10 +76,6 @@ def login_page():
 @app.route('/signup-page')
 def signup_page():
     return render_template('signup.html')
-
-@app.route('/contact-us-page')
-def contact_us_page():
-    return render_template('contact-us.html')
 
 # Blog-related routes
 posts = [
@@ -92,3 +132,4 @@ def add_comment(post_id):
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
