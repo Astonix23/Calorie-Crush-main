@@ -145,6 +145,10 @@ next_post_id = 2  # For generating post IDs
 def community_page():
     return render_template("community.html", posts=posts)
 
+@app.route("/profile-page")
+def profile_page():
+    return render_template("profile.html")
+
 
 @app.route("/create-post", methods=["GET", "POST"])
 def create_post():
