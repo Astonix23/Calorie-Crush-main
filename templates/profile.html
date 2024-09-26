@@ -44,6 +44,35 @@
       <div class="about_profile">
       <h2>Welcome, {{ user }}!</h2>
       <p>This is your profile page.</p>
+      <div id="editable" contenteditable="false">{{user}}</div>
+      <button onclick="toggleEdit()">Edit</button>
+      <button onclick="saveContent()">Save</button>
+  
+      <script>
+          function toggleEdit() {
+              const editableDiv = document.getElementById('editable');
+              const isEditable = editableDiv.getAttribute('contenteditable') === 'true';
+              editableDiv.setAttribute('contenteditable', !isEditable);
+          }
+  
+          function saveContent() {
+              const content = document.getElementById('editable').innerHTML;
+              fetch('/save', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ content: content }),
+              })
+              .then(response => response.json())
+              .then(data => {
+                  alert('Content saved: ' + data.message);
+              })
+              .catch((error) => {
+                  console.error('Error:', error);
+              });
+          }
+      </script>
       <a href="/logout">Logout</a>
     </div>
     
