@@ -4,6 +4,11 @@
             "name": "Suyash Srivastava",
             "email": "suyashsri24@gmail.com",
             "password": "scrypt:32768:8:1$ND0e4usoQUJz3ETA$3c074bb988ced0eeb13f3b20f56c7a0bd1d76cf4354d82ee39324755292dddc5b310820ff3c27f18492bacd30fb7d81f99eb64182224b7046ea6aa288becda21"
+        },
+        {
+            "name": "Abhimanyu",
+            "email": "abhimanyuchhoker16@gmail.com",
+            "password": "scrypt:32768:8:1$kUOHYemfDARk7omc$547cc5c4d2eb544ec50a47ecfd3231c71391b4633991eb868cbff2f9d586e9c9ada37e64cd0ad368d200b2e55911ac30296d7522d5e62c00e11d08477d1d0b51"
         }
     ]
 }

@@ -132,7 +132,6 @@ def log_workout():
     )  # Redirect to the same form page after submission
 
 
-# Signup route
 @app.route("/signup-page", methods=["GET", "POST"])
 def signup_page():
     if request.method == "POST":
@@ -144,10 +143,7 @@ def signup_page():
         if password != confirm_password:
             return "Passwords do not match", 400
 
-        # Hash the password before saving
         hashed_password = generate_password_hash(password)
-
-        # Load existing users
         users_db = load_users()
 
         # Check if the email is already registered
@@ -155,7 +151,6 @@ def signup_page():
             if user["email"] == email:
                 return "Email already exists", 400
 
-        # Save new user
         new_user = {"name": name, "email": email, "password": hashed_password}
         users_db["users"].append(new_user)
         save_users(users_db)
@@ -168,41 +163,35 @@ def signup_page():
 @app.route("/login-profile-page", methods=["GET", "POST"])
 def login_or_profile():
     if request.method == "POST":
-        # Handle form submission (login attempt)
-        email = request.form["email"].lower()  # Make email case-insensitive
+        email = request.form["email"].lower()
         password = request.form["password"]
 
-        # Load users from the database
         users_db = load_users()
 
-        # Find the user by email
         for user in users_db["users"]:
-            if user["email"].lower() == email:  # Compare emails in lowercase
-                # Check the password hash
+            if user["email"].lower() == email:
                 if check_password_hash(user["password"], password):
-                    session["user"] = user["name"]  # Set session for logged-in user
-                    return redirect(url_for("login_or_profile"))  # Reload the page to show the profile
+                    session["user"] = user["name"]
+                    return redirect(url_for("login_or_profile"))
                 else:
                     error_message = "Invalid password. Please try again."
                     return render_template("login.html", error=error_message)
 
-        # If email is not found
         error_message = "Email not found. Please try again."
         return render_template("login.html", error=error_message)
 
-    # Handle GET request: Show profile if logged in, otherwise show login form
+    # Show profile if logged in
     if "user" in session:
-        # The user is logged in, so show the profile page
         return render_template("profile.html", user=session["user"])
     else:
-        # The user is not logged in, show the login form
+        # If not logged in, show login form
         return render_template("login.html")
 
 
-@app.route("/contact-us-page")
-def contact_us_page():
-    return render_template("contact-us.html")
-
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect(url_for("login_or_profile"))
 
 # Blog-related routes
 posts = [
