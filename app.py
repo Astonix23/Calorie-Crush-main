@@ -193,6 +193,7 @@ def logout():
     session.pop("user", None)
     return redirect(url_for("login_or_profile"))
 
+
 # Blog-related routes
 posts = [
     {
@@ -210,8 +211,6 @@ next_post_id = 2  # For generating post IDs
 @app.route("/community-page")
 def community_page():
     return render_template("community.html", posts=posts)
-
-
 
 
 @app.route("/create-post", methods=["GET", "POST"])
