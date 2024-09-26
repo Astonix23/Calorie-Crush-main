@@ -8,14 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;700&display=swap" rel="stylesheet" />
 
     <title>Fitness Progress Dashboard</title>
     <!-- Include Chart.js -->
@@ -30,9 +24,7 @@
         <nav>
           <ul>
             <li class="raleway"><a href="/">Home</a></li>
-            <li class="raleway">
-              <a href="/fitness-plan-page">Fitness Plan</a>
-            </li>
+            <li class="raleway"><a href="/fitness-plan-page">Fitness Plan</a></li>
             <li class="raleway"><a href="/diet-plan-page">Diet Plan</a></li>
             <li class="raleway"><a href="/community-page">Community</a></li>
             <li class="raleway"><a href="/progress-page">Progress</a></li>
@@ -48,15 +40,15 @@
       <div class="dashboard-overview">
         <div class="overview-card">
           <h3>Total Workout Time</h3>
-          <p>245 Minutes</p>
+          <p>{{ total_workout_time }} Minutes</p>
         </div>
         <div class="overview-card">
           <h3>Body Weight</h3>
-          <p>65 kg</p>
+          <p>{{ body_weight }} kg</p>
         </div>
         <div class="overview-card">
           <h3>Goal Completion</h3>
-          <p>75%</p>
+          <p>{{ goal_completion }}%</p>
         </div>
         <div class="overview-card">
           <button class="btn"><a href="/log-workout-page" style="color: white;">Log New Workout</a></button>
@@ -94,50 +86,18 @@
 
     <!-- Chart.js Script -->
     <script>
-      // Modern, compact chart options
       const modernOptions = {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              font: {
-                size: 14
-              }
-            }
-          },
-          tooltip: {
-            backgroundColor: '#333',
-            titleColor: '#fff',
-            bodyColor: '#fff'
-          }
+          legend: { position: 'bottom', labels: { font: { size: 14 } } },
+          tooltip: { backgroundColor: '#333', titleColor: '#fff', bodyColor: '#fff' }
         },
         scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              font: {
-                size: 12
-              }
-            }
-          },
-          x: {
-            ticks: {
-              font: {
-                size: 12
-              }
-            }
-          }
+          y: { beginAtZero: true, ticks: { font: { size: 12 } } },
+          x: { ticks: { font: { size: 12 } } }
         },
-        elements: {
-          line: {
-            tension: 0.4
-          },
-          bar: {
-            borderRadius: 10
-          }
-        }
+        elements: { line: { tension: 0.4 }, bar: { borderRadius: 10 } }
       };
 
       // Workout Progress Chart
@@ -146,12 +106,7 @@
         type: 'bar',
         data: {
           labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          datasets: [{
-            label: 'Minutes of Exercise',
-            data: {{ workout_data|tojson }},
-            backgroundColor: '#28a745',
-            borderRadius: 10
-          }]
+          datasets: [{ label: 'Minutes of Exercise', data: {{ workout_data|tojson }}, backgroundColor: '#28a745', borderRadius: 10 }]
         },
         options: modernOptions
       });
@@ -162,13 +117,7 @@
         type: 'line',
         data: {
           labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-          datasets: [{
-            label: 'Weight (kg)',
-            data: {{ body_measurements|tojson }},
-            borderColor: '#28a745',
-            fill: false,
-            tension: 0.4
-          }]
+          datasets: [{ label: 'Weight (kg)', data: {{ body_measurements|tojson }}, borderColor: '#28a745', fill: false, tension: 0.4 }]
         },
         options: modernOptions
       });
@@ -179,26 +128,9 @@
         type: 'doughnut',
         data: {
           labels: ['Completed', 'Remaining'],
-          datasets: [{
-            data: {{ goal_progress|tojson }},
-            backgroundColor: ['#28a745', '#ddd'],
-            cutout: '80%'
-          }]
+          datasets: [{ data: {{ goal_progress|tojson }}, backgroundColor: ['#28a745', '#ddd'], cutout: '80%' }]
         },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                font: {
-                  size: 14
-                }
-              }
-            }
-          }
-        }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 14 } } } } }
       });
     </script>
   </body>

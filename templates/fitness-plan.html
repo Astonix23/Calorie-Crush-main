@@ -15,7 +15,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Fitness Plan</title>
+    <title>Personalized Fitness Plan | Calorie Crush</title>
     <link rel="stylesheet" href="static/base.css" />
     <link rel="stylesheet" href="static/fitness-plan.css" />
   </head>
@@ -28,9 +28,7 @@
         <nav>
           <ul>
             <li class="raleway"><a href="/">Home</a></li>
-            <li class="raleway">
-              <a href="/fitness-plan-page">Fitness Plan</a>
-            </li>
+            <li class="raleway"><a href="/fitness-plan-page">Fitness Plan</a></li>
             <li class="raleway"><a href="/diet-plan-page">Diet Plan</a></li>
             <li class="raleway"><a href="/community-page">Community</a></li>
             <li class="raleway"><a href="/progress-page">Progress</a></li>
@@ -51,39 +49,63 @@
           endurance. Whether you're just starting out or are looking to push
           your limits, we have a plan for you.
         </p>
-        <p>
-          Our plans focus on progressive training, ensuring that you're
-          consistently challenged while preventing injury. Whether you prefer
-          strength training, cardio, or a mix of both, we’ve got you covered
-          with routines that are easy to follow and designed to fit into your
-          schedule.
-        </p>
-        <p>Here’s how it works:</p>
-        <ul>
-          <li>
-            <b>Input your preferences:</b> We’ll ask you a few questions about
-            your fitness goals, equipment access, and current fitness level.
-          </li>
-          <li>
-            <b>Get your plan:</b> Based on your input, we’ll generate a
-            customized workout plan designed to help you hit your targets.
-          </li>
-          <li>
-            <b>Track your progress:</b> Use the fitness plan regularly and
-            adjust as needed, with our in-built analytics helping you track
-            improvements over time.
-          </li>
-        </ul>
-        <p>
-          Click the button below to generate your fitness plan and take the
-          first step toward achieving your goals.
-        </p>
-        <button class="btn">Create My Fitness Plan Now</button>
-        <div
-          id="fitness-result"
-          style="margin-top: 20px; font-size: 1.2rem; color: #555"
-        ></div>
-      </div>
+
+        <form action="/generate-fitness-plan" method="POST">
+          <h3>Choose Your Preferences</h3>
+          <label for="goal">Select Your Goal:</label>
+          <select name="goal" id="goal" class="input-select">
+            <option value="Build Muscle">Build Muscle</option>
+            <option value="Lose Weight">Lose Weight</option>
+            <option value="Increase Endurance">Increase Endurance</option>
+          </select>
+        
+          <label for="experience">Select Your Experience Level:</label>
+          <select name="experience" id="experience" class="input-select">
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+        
+          <label for="equipment">Select Available Equipment:</label>
+          <div class="checkbox-group">
+            <input checked type="checkbox" name="equipment" value="Bodyweight" id="bodyweight" />
+            <label for="bodyweight">Bodyweight</label>
+
+            <input type="checkbox" name="equipment" value="Dumbbells" id="dumbbells" />
+            <label for="dumbbells">Dumbbells</label>
+
+            <input type="checkbox" name="equipment" value="Resistance Bands" id="resistance_bands" />
+            <label for="resistance_bands">Resistance Bands</label>
+
+            <input type="checkbox" name="equipment" value="Barbells" id="barbells" />
+            <label for="barbells">Barbells</label>
+
+            <input type="checkbox" name="equipment" value="Kettlebells" id="kettlebells" />
+            <label for="kettlebells">Kettlebells</label>
+
+            <input type="checkbox" name="equipment" value="Cardio" id="cardio" />
+            <label for="cardio">Cardio</label>
+          </div>
+
+          <button type="submit" class="btn">Create My Fitness Plan</button>
+        </form>
+        {% if generated_plan %}
+        <div id="fitness-result">
+          <h3>Your Personalized Fitness Plan:</h3>
+          <ul>
+            {% for day in generated_plan %}
+              <li><strong>{{ day['Day'] }}</strong></li>  <!-- Display Day 1, Day 2, etc. -->
+              <ul>
+                {% for exercise in day['Exercises'] %}
+                  <li>{{ exercise }} - {{ day['Sets'] }} Sets of {{ day['Reps'] }} Reps</li>  <!-- Display sets and reps -->
+                {% endfor %}
+              </ul>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      
+      
     </section>
 
     <footer class="raleway">
@@ -91,7 +113,7 @@
         <p>2024 Calorie Crush. Created with ❤️ by Abhimanyu and Suyash.</p>
         <p>
           For any inquiries, feel free to
-          <a style="color: white" href="#contact">contact us</a>
+          <a style="color: white" href="#contact">contact us</a>.
         </p>
       </div>
     </footer>

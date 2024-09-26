@@ -44,26 +44,12 @@
 
                 <h3>Select Exercises Completed</h3>
                 <div class="exercise-list">
+                    {% for exercise in exercises %}
                     <div class="exercise-item">
-                        <input type="checkbox" id="exercise1" name="exercise" value="Pushups">
-                        <label for="exercise1">Pushups</label>
+                        <input type="checkbox" id="exercise{{ loop.index }}" name="exercise" value="{{ exercise }}">
+                        <label for="exercise{{ loop.index }}">{{ exercise }}</label>
                     </div>
-                    <div class="exercise-item">
-                        <input type="checkbox" id="exercise2" name="exercise" value="Squats">
-                        <label for="exercise2">Squats</label>
-                    </div>
-                    <div class="exercise-item">
-                        <input type="checkbox" id="exercise3" name="exercise" value="Lunges">
-                        <label for="exercise3">Lunges</label>
-                    </div>
-                    <div class="exercise-item">
-                        <input type="checkbox" id="exercise4" name="exercise" value="Plank">
-                        <label for="exercise4">Plank</label>
-                    </div>
-                    <div class="exercise-item">
-                        <input type="checkbox" id="exercise5" name="exercise" value="Burpees">
-                        <label for="exercise5">Burpees</label>
-                    </div>
+                    {% endfor %}
                 </div>
 
                 <label for="notes">Additional Notes</label>

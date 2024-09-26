@@ -80,6 +80,16 @@
                 "Plank",
                 "Burpees"
             ]
+        },
+        {
+            "date": "2024-09-26 18:11:15",
+            "weight": 30.0,
+            "duration": 40,
+            "exercises": [
+                "Barbell Power Clean",
+                "Barbell Dead Rows"
+            ],
+            "notes": ""
         }
     ]
 }
