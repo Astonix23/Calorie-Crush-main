@@ -1,8 +1,43 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
+from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = "\xae7)\xa0\n\xb9J\xa4\xe3\x9aD\xd6\xb0$&\xad\x1b\x8a\xc6z\x1d%V\xbe"
+
+
+def load_users():
+    try:
+        with open("users.json", "r") as file:
+            users_data = json.load(file)
+            # Ensure the file has a valid structure, even if it's empty
+            if "users" not in users_data:
+                return {"users": []}
+            return users_data
+    except (FileNotFoundError, json.JSONDecodeError):
+        # If the file is missing or empty/corrupt, return an empty structure
+        return {"users": []}
+
+
+# Save users to the database
+def save_users(users):
+    with open("users.json", "w") as file:
+        json.dump(users, file, indent=4)
+
+
+def load_database():
+    try:
+        with open("database.json", "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return {"workouts": []}
+
+
+# Save the database
+def save_database(data):
+    with open("database.json", "w") as file:
+        json.dump(data, file, indent=4)
 
 
 # Existing Routes
@@ -27,21 +62,6 @@ def fitness_plan_page():
         body_measurements=body_measurements,
         goal_progress=goal_progress,
     )
-
-
-# Load the database
-def load_database():
-    try:
-        with open("database.json", "r") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        return {"workouts": []}
-
-
-# Save the database
-def save_database(data):
-    with open("database.json", "w") as file:
-        json.dump(data, file, indent=4)
 
 
 @app.route("/progress-page")
@@ -97,7 +117,7 @@ def log_workout():
             "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "weight": float(weight),
             "duration": int(duration),
-            "exercises": exercises
+            "exercises": exercises,
         }
     except ValueError:
         return "Invalid input", 400  # Handle invalid inputs gracefully
@@ -112,14 +132,71 @@ def log_workout():
     )  # Redirect to the same form page after submission
 
 
-@app.route("/login-page")
-def login_page():
-    return render_template("login.html")
-
-
-@app.route("/signup-page")
+# Signup route
+@app.route("/signup-page", methods=["GET", "POST"])
 def signup_page():
+    if request.method == "POST":
+        name = request.form["name"]
+        email = request.form["email"]
+        password = request.form["password"]
+        confirm_password = request.form["confirm-password"]
+
+        if password != confirm_password:
+            return "Passwords do not match", 400
+
+        # Hash the password before saving
+        hashed_password = generate_password_hash(password)
+
+        # Load existing users
+        users_db = load_users()
+
+        # Check if the email is already registered
+        for user in users_db["users"]:
+            if user["email"] == email:
+                return "Email already exists", 400
+
+        # Save new user
+        new_user = {"name": name, "email": email, "password": hashed_password}
+        users_db["users"].append(new_user)
+        save_users(users_db)
+
+        return redirect(url_for("login_or_profile"))
+
     return render_template("signup.html")
+
+
+@app.route("/login-profile-page", methods=["GET", "POST"])
+def login_or_profile():
+    if request.method == "POST":
+        # Handle form submission (login attempt)
+        email = request.form["email"].lower()  # Make email case-insensitive
+        password = request.form["password"]
+
+        # Load users from the database
+        users_db = load_users()
+
+        # Find the user by email
+        for user in users_db["users"]:
+            if user["email"].lower() == email:  # Compare emails in lowercase
+                # Check the password hash
+                if check_password_hash(user["password"], password):
+                    session["user"] = user["name"]  # Set session for logged-in user
+                    return redirect(url_for("login_or_profile"))  # Reload the page to show the profile
+                else:
+                    error_message = "Invalid password. Please try again."
+                    return render_template("login.html", error=error_message)
+
+        # If email is not found
+        error_message = "Email not found. Please try again."
+        return render_template("login.html", error=error_message)
+
+    # Handle GET request: Show profile if logged in, otherwise show login form
+    if "user" in session:
+        # The user is logged in, so show the profile page
+        return render_template("profile.html", user=session["user"])
+    else:
+        # The user is not logged in, show the login form
+        return render_template("login.html")
 
 
 @app.route("/contact-us-page")
@@ -145,9 +222,7 @@ next_post_id = 2  # For generating post IDs
 def community_page():
     return render_template("community.html", posts=posts)
 
-@app.route("/profile-page")
-def profile_page():
-    return render_template("profile.html")
+
 
 
 @app.route("/create-post", methods=["GET", "POST"])
