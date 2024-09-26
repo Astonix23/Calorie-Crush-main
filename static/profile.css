@@ -85,4 +85,5 @@
   footer p {
     margin: 0;
   }
-  
+
+  .about_profile{background-color: white; width: 25%; height: 400px; text-align: center; align-items: center; margin: auto; margin-top: 150px;}
