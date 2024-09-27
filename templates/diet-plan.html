@@ -83,10 +83,18 @@
           step toward a healthier you.
         </p>
         <button class="btn">Create My Diet Plan Now</button>
-        <div
-          id="diet-result"
-          style="margin-top: 20px; font-size: 1.2rem; color: #555"
-        ></div>
+        <form action="{{ url_for('generate_diet_plan') }}" method="post">
+          <label for="cheat_meals">Cheat Meal Preferences:</label>
+          <input type="text" id="cheat_meals" name="cheat_meals" placeholder="e.g. Pizza, Ice Cream">
+      
+          <label for="allergies">Allergies:</label>
+          <input type="text" id="allergies" name="allergies" placeholder="e.g. Nuts, Dairy">
+      
+          <label for="dietary_restrictions">Dietary Restrictions:</label>
+          <input type="text" id="dietary_restrictions" name="dietary_restrictions" placeholder="e.g. Vegan, Gluten-free">
+      
+          <button type="submit">Generate Diet Plan</button>
+      </form>
       </div>
     </section>
 

@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from datetime import datetime
 import random
+from diet_plan_gen import create_personalized_diet_plans as cdp
 
 app = Flask(__name__)
 app.secret_key = "\xae7)\xa0\n\xb9J\xa4\xe3\x9aD\xd6\xb0$&\xad\x1b\x8a\xc6z\x1d%V\xbe"
@@ -18,16 +19,19 @@ EXERCISE_CATEGORIES = {
             "Dumbbell Bicep Curl",
         ],
         "Barbells": ["Barbell Bench Press", "Barbell Shoulder Press", "Barbell Rows"],
+        "Kettlebells": ["Kettlebell Shoulder Press", "Kettlebell Rows", "Kettlebell Tricep Extension"],
     },
     "Lower Body": {
         "Bodyweight": ["Squats", "Lunges", "Wall Sit", "Bicycle Crunches"],
         "Dumbbells": ["Dumbbell Squat", "Dumbbell Lunges", "Dumbbell Deadlift"],
         "Barbells": ["Barbell Squats", "Barbell Deadlift", "Barbell Lunges"],
+        "Kettlebells": ["Kettlebell Goblet Squat", "Kettlebell Deadlift", "Kettlebell Lunges"],
     },
     "Full Body": {
         "Bodyweight": ["Burpees", "Mountain Climbers", "Jumping Jacks"],
         "Dumbbells": ["Dumbbell Clean and Press"],
         "Barbells": ["Barbell Clean and Press"],
+        "Kettlebells": ["Kettlebell Clean and Press", "Kettlebell Swing", "Kettlebell Snatch"],
     },
     "Cardio": {"Cardio": ["Cycling", "Running", "Jogging"]},
     "Yoga": {
@@ -155,9 +159,24 @@ def index():
     return render_template("index.html")
 
 
+
+
 @app.route("/diet-plan-page")
 def diet_plan_page():
     return render_template("diet-plan.html")
+
+@app.route("/generate-diet-plan", methods=["POST"])
+def generate_diet_plan():
+    # Capture user input
+    cheat_meals = request.form.get("cheat_meals", "").split(",")
+    allergies = request.form.get("allergies", "").split(",")
+    dietary_restrictions = request.form.get("dietary_restrictions", "").split(",")
+
+    # AI-based logic to generate a diet plan
+    diet_plan = cdp(cheat_meals, allergies, dietary_restrictions)
+
+    # Render the diet plan template
+    return render_template("diet-plan.html", diet_plan=diet_plan)
 
 
 @app.route("/fitness-plan-page")
