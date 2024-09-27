@@ -55,6 +55,10 @@ header {
   font-size: 2rem;
   color: black;
 }
+.logo_image{
+  width: 100px;
+  height: 50px;
+}
 
 nav ul {
   list-style: none;
