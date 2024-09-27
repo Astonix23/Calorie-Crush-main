@@ -11,13 +11,12 @@
       href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;700&display=swap"
       rel="stylesheet"
     />
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Personalized Fitness Plan | Calorie Crush</title>
-    <link rel="stylesheet" href="static/base.css" />
-    <link rel="stylesheet" href="static/fitness-plan.css" />
+    <link rel="stylesheet" href="/static/base.css" />
+    <link rel="stylesheet" href="/static/fitness-plan.css" />
   </head>
   <body>
     <header>
@@ -39,82 +38,87 @@
       </div>
     </header>
 
+    <!-- Fitness Plan Section -->
     <section id="fitness-plan">
       <div class="fitness-plan-content raleway">
         <h2>Personalized Fitness Plans for Every Goal</h2>
         <p>
-          Achieving your fitness goals starts with a personalized workout plan
-          tailored to your needs. At Calorie Crush, we offer custom fitness
-          plans designed to help you get fit, build muscle, or improve
-          endurance. Whether you're just starting out or are looking to push
-          your limits, we have a plan for you.
+          Achieve your fitness goals with a workout plan tailored to your needs. Fill out the form below to create your personalized fitness plan.
         </p>
 
+        <!-- Form for Fitness Plan -->
         <form action="/generate-fitness-plan" method="POST">
           <h3>Choose Your Preferences</h3>
+
           <label for="goal">Select Your Goal:</label>
-          <select name="goal" id="goal" class="input-select">
+          <select name="goal" id="goal" class="select-dropdown">
             <option value="Build Muscle">Build Muscle</option>
             <option value="Lose Weight">Lose Weight</option>
             <option value="Increase Endurance">Increase Endurance</option>
           </select>
-        
+
           <label for="experience">Select Your Experience Level:</label>
-          <select name="experience" id="experience" class="input-select">
+          <select name="experience" id="experience" class="select-dropdown">
             <option value="Beginner">Beginner</option>
             <option value="Intermediate">Intermediate</option>
             <option value="Advanced">Advanced</option>
           </select>
-        
+
           <label for="equipment">Select Available Equipment:</label>
           <div class="checkbox-group">
-            <input checked type="checkbox" name="equipment" value="Bodyweight" id="bodyweight" />
-            <label for="bodyweight">Bodyweight</label>
-
-            <input type="checkbox" name="equipment" value="Dumbbells" id="dumbbells" />
-            <label for="dumbbells">Dumbbells</label>
-
-            <input type="checkbox" name="equipment" value="Resistance Bands" id="resistance_bands" />
-            <label for="resistance_bands">Resistance Bands</label>
-
-            <input type="checkbox" name="equipment" value="Barbells" id="barbells" />
-            <label for="barbells">Barbells</label>
-
-            <input type="checkbox" name="equipment" value="Kettlebells" id="kettlebells" />
-            <label for="kettlebells">Kettlebells</label>
-
-            <input type="checkbox" name="equipment" value="Cardio" id="cardio" />
-            <label for="cardio">Cardio</label>
+            <label>
+              <input type="checkbox" name="equipment" value="Bodyweight" id="bodyweight" />
+              Bodyweight
+            </label>
+            <label>
+              <input type="checkbox" name="equipment" value="Dumbbells" id="dumbbells" />
+              Dumbbells
+            </label>
+            <label>
+              <input type="checkbox" name="equipment" value="Resistance Bands" id="resistance_bands" />
+              Resistance Bands
+            </label>
+            <label>
+              <input type="checkbox" name="equipment" value="Barbells" id="barbells" />
+              Barbells
+            </label>
+            <label>
+              <input type="checkbox" name="equipment" value="Kettlebells" id="kettlebells" />
+              Kettlebells
+            </label>
+            <label>
+              <input type="checkbox" name="equipment" value="Cardio" id="cardio" />
+              Cardio
+            </label>
           </div>
 
           <button type="submit" class="btn">Create My Fitness Plan</button>
         </form>
-        {% if generated_plan %}
+
+        <!-- Display Fitness Plan -->
         <div id="fitness-result">
+          {% if generated_plan %}
           <h3>Your Personalized Fitness Plan:</h3>
           <ul>
             {% for day in generated_plan %}
               <li><strong>{{ day['Day'] }}</strong></li>  <!-- Display Day 1, Day 2, etc. -->
               <ul>
                 {% for exercise in day['Exercises'] %}
-                  <li>{{ exercise }} - {{ day['Sets'] }} Sets of {{ day['Reps'] }} Reps</li>  <!-- Display sets and reps -->
+                  <li>{{ exercise }} - {{ day['Sets'] }} Sets of {{ day['Reps'] }} Reps</li>
                 {% endfor %}
               </ul>
             {% endfor %}
           </ul>
+          {% endif %}
         </div>
-      {% endif %}
-      
-      
+      </div>
     </section>
 
+    <!-- Footer Section -->
     <footer class="raleway">
       <div class="container">
-        <p>2024 Calorie Crush. Created with ❤️ by Abhimanyu and Suyash.</p>
-        <p>
-          For any inquiries, feel free to
-          <a style="color: white" href="#contact">contact us</a>.
-        </p>
+        <p>2024 Calorie Crush. Created with ❤️ by Your Team.</p>
+        <p>For any inquiries, feel free to <a style="color: white" href="#contact">contact us</a>.</p>
       </div>
     </footer>
   </body>

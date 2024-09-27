@@ -158,29 +158,37 @@ def save_database(data):
 def index():
     return render_template("index.html")
 
-
-
-
 @app.route("/diet-plan-page")
-def diet_plan_page():
+def diet_plan():
     return render_template("diet-plan.html")
 
+# Route to handle the form submission and generate the diet plan
 @app.route('/generate-diet-plan', methods=['POST'])
 def generate_diet_plan():
-    # Collect user input from the form
+    # Collect user input from the form and print them for debugging
     age = int(request.form['age'])
     weight = float(request.form['weight'])
     gender = request.form['gender']
     activity_level = int(request.form['activity_level'])
     goal = request.form['goal']
-    dietary_restrictions = request.form['dietary_restrictions']
-    allergies = request.form['allergies']
-    
-    # Call the AI/ML-based diet plan generator
-    diet_plan, nutrients = handle_form_submission(age, weight, gender, activity_level, goal, dietary_restrictions, allergies)
-    
-    # Render the same template, but now with the generated diet plan
+    dietary_restrictions = request.form.get('dietary_restrictions', '')
+    allergies = request.form.get('allergies', '')
+    vegetarian = request.form.get('vegetarian') == 'Yes'  # Handle vegetarian preference
+
+    # Debug: print user inputs to check if they are captured correctly
+    print(f"Age: {age}, Weight: {weight}, Gender: {gender}, Activity Level: {activity_level}")
+    print(f"Goal: {goal}, Dietary Restrictions: {dietary_restrictions}, Allergies: {allergies}, Vegetarian: {vegetarian}")
+
+    # Generate the diet plan (assume handle_form_submission is working properly)
+    diet_plan, nutrients = handle_form_submission(age, weight, gender, activity_level, goal, dietary_restrictions, allergies, vegetarian)
+
+    # Debug: print diet plan and nutrients to check if they are generated correctly
+    print(f"Diet Plan: {diet_plan}")
+    print(f"Nutrients: {nutrients}")
+
+    # Render the diet plan page with the generated diet plan
     return render_template('diet-plan.html', diet_plan=diet_plan, nutrients=nutrients)
+
 
 @app.route("/fitness-plan-page")
 def fitness_plan_page():

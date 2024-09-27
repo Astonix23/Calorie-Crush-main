@@ -1,129 +1,126 @@
-import requests
 import pandas as pd
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split
 import random
+meals_data = [
+    # Vegetarian Healthy Meals
+    {"name": "Oatmeal with Berries", "calories": 300, "protein": 10, "carbs": 50, "fats": 5, "vegetarian": True},
+    {"name": "Avocado Toast with Whole Grain Bread", "calories": 350, "protein": 9, "carbs": 40, "fats": 15, "vegetarian": True},
+    {"name": "Quinoa Salad with Chickpeas and Veggies", "calories": 400, "protein": 15, "carbs": 55, "fats": 12, "vegetarian": True},
+    {"name": "Spinach and Feta Salad with Olive Oil", "calories": 300, "protein": 12, "carbs": 25, "fats": 20, "vegetarian": True},
+    {"name": "Lentil Soup with Whole Grain Bread", "calories": 350, "protein": 18, "carbs": 45, "fats": 5, "vegetarian": True},
+    {"name": "Stir-fried Vegetables with Tofu", "calories": 350, "protein": 20, "carbs": 40, "fats": 10, "vegetarian": True},
+    {"name": "Sweet Potato and Black Bean Chili", "calories": 400, "protein": 15, "carbs": 55, "fats": 10, "vegetarian": True},
+    {"name": "Greek Yogurt with Honey and Nuts", "calories": 250, "protein": 15, "carbs": 25, "fats": 10, "vegetarian": True},
+    {"name": "Brown Rice and Vegetable Stir-fry", "calories": 400, "protein": 10, "carbs": 60, "fats": 12, "vegetarian": True},
+    {"name": "Vegetarian Buddha Bowl", "calories": 450, "protein": 20, "carbs": 60, "fats": 15, "vegetarian": True},
 
-# Step 1: Generate a Synthetic Dataset
+    # Non-Vegetarian Healthy Meals
+    {"name": "Grilled Chicken Breast with Steamed Broccoli", "calories": 400, "protein": 40, "carbs": 30, "fats": 10, "vegetarian": False},
+    {"name": "Baked Salmon with Quinoa and Asparagus", "calories": 450, "protein": 35, "carbs": 35, "fats": 15, "vegetarian": False},
+    {"name": "Turkey and Avocado Wrap in Whole Wheat Tortilla", "calories": 350, "protein": 25, "carbs": 40, "fats": 10, "vegetarian": False},
+    {"name": "Shrimp and Brown Rice Stir-fry", "calories": 400, "protein": 30, "carbs": 55, "fats": 10, "vegetarian": False},
+    {"name": "Grilled Chicken Salad with Olive Oil", "calories": 350, "protein": 35, "carbs": 20, "fats": 15, "vegetarian": False},
+    {"name": "Egg White Omelette with Spinach and Mushrooms", "calories": 300, "protein": 25, "carbs": 10, "fats": 10, "vegetarian": False},
+    {"name": "Tuna Salad with Mixed Greens", "calories": 350, "protein": 30, "carbs": 15, "fats": 20, "vegetarian": False},
+    {"name": "Chicken and Avocado Salad", "calories": 400, "protein": 35, "carbs": 20, "fats": 20, "vegetarian": False},
+    {"name": "Beef Stir-fry with Vegetables", "calories": 450, "protein": 40, "carbs": 35, "fats": 15, "vegetarian": False},
+    {"name": "Baked Cod with Sweet Potatoes and Green Beans", "calories": 400, "protein": 35, "carbs": 40, "fats": 10, "vegetarian": False},
+
+    # Healthy Snacks
+    {"name": "Apple Slices with Peanut Butter", "calories": 200, "protein": 6, "carbs": 25, "fats": 10, "vegetarian": True},
+    {"name": "Carrot and Hummus Snack", "calories": 150, "protein": 5, "carbs": 20, "fats": 8, "vegetarian": True},
+    {"name": "Mixed Nuts", "calories": 200, "protein": 6, "carbs": 15, "fats": 15, "vegetarian": True},
+    {"name": "Greek Yogurt with Blueberries", "calories": 200, "protein": 12, "carbs": 25, "fats": 5, "vegetarian": True},
+    {"name": "Protein Bar (Low Sugar)", "calories": 250, "protein": 20, "carbs": 30, "fats": 7, "vegetarian": True},
+    {"name": "Hard-boiled Eggs", "calories": 150, "protein": 12, "carbs": 1, "fats": 10, "vegetarian": False},
+    {"name": "Smoothie with Spinach, Banana, and Protein Powder", "calories": 250, "protein": 20, "carbs": 40, "fats": 5, "vegetarian": True}
+]
+
+# Calorie estimation logic
 def generate_calories(age, weight, gender, activity_level, goal):
-    """Estimate calories using synthetic data logic similar to Mifflin-St Jeor equation."""
-    # Base BMR calculation (simplified for synthetic data generation)
-    if gender == "Male":
-        bmr = 10 * weight + 6.25 * 175 - 5 * age + 5  # Assuming height = 175 cm for males
+    if gender.lower() == "male":
+        bmr = 10 * weight + 6.25 * 175 - 5 * age + 5
     else:
-        bmr = 10 * weight + 6.25 * 165 - 5 * age - 161  # Assuming height = 165 cm for females
-
-    # Activity level multiplier
+        bmr = 10 * weight + 6.25 * 165 - 5 * age - 161
+    
     activity_multiplier = [1.2, 1.375, 1.55, 1.725, 1.9][activity_level - 1]
     calories = bmr * activity_multiplier
-    
-    # Adjust for goal (lose weight, maintain, gain muscle)
-    if goal == "lose weight":
+
+    if goal.lower() == "lose weight":
         calories -= 500
-    elif goal == "gain muscle":
+    elif goal.lower() == "gain muscle":
         calories += 500
     
     return int(calories)
 
-# Generate a synthetic dataset
-def generate_synthetic_data():
-    """Create a synthetic dataset for training the RandomForestRegressor."""
-    data = []
-    for _ in range(1000):  # Generate 1000 synthetic records
-        age = random.randint(18, 60)
-        weight = random.randint(50, 100)
-        gender = random.choice(["Male", "Female"])
-        activity_level = random.randint(1, 5)  # 1 (sedentary) to 5 (very active)
-        goal = random.choice(["lose weight", "maintain", "gain muscle"])
-        calories = generate_calories(age, weight, gender, activity_level, goal)
-        
-        data.append([age, weight, gender, activity_level, goal, calories])
 
-    # Create a DataFrame
-    df = pd.DataFrame(data, columns=["age", "weight", "gender", "activity_level", "goal", "calories"])
-    return df
+def generate_meals(predicted_calories, vegetarian=False, dietary_restrictions=None, allergies=None):
+    meal_plan = []
+    chosen_meals = []  # Keep track of selected meals to ensure variety
+    
+    # Filter meals based on vegetarian preference
+    suitable_meals = [meal for meal in meals_data if meal['vegetarian'] or not vegetarian]
+    
+    # Filter out meals based on dietary restrictions or allergies
+    if dietary_restrictions:
+        suitable_meals = [meal for meal in suitable_meals if dietary_restrictions.lower() not in meal['name'].lower()]
+    
+    if allergies:
+        suitable_meals = [meal for meal in suitable_meals if allergies.lower() not in meal.get('ingredients', '').lower()]
 
-# Generate and save the synthetic dataset
-df = generate_synthetic_data()
-
-# Step 2: Preprocess the Data
-# Convert gender and goal to numerical format
-df['gender'] = df['gender'].map({'Male': 0, 'Female': 1})
-df['goal'] = df['goal'].map({'lose weight': 0, 'maintain': 1, 'gain muscle': 2})
-
-# Features and target
-X = df[['age', 'weight', 'gender', 'activity_level', 'goal']]
-y = df['calories']
-
-# Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Step 3: Train the RandomForestRegressor
-model = RandomForestRegressor(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
-
-# Step 4: Integrate with Spoonacular API
-API_KEY = 'yob3ed4a94a8b24f60aee3ba3f29374f6a '
-
-def get_meals(predicted_calories, dietary_restrictions, allergies):
-    """Fetch meal plan from Spoonacular API based on predicted calories and user preferences."""
-    url = 'https://api.spoonacular.com/mealplanner/generate'
-    params = {
-        'apiKey': API_KEY,
-        'timeFrame': 'day',
-        'targetCalories': predicted_calories,
-        'diet': dietary_restrictions,
-        'exclude': allergies
+    # Define calorie distribution for breakfast, lunch, and dinner
+    meal_distributions = {
+        "breakfast": predicted_calories * 0.3,
+        "lunch": predicted_calories * 0.4,
+        "dinner": predicted_calories * 0.3
     }
-    
-    response = requests.get(url, params=params)
 
-    # Add this to see exactly what the API is returning
-    print("API Response:", response.json())
-    
-    if response.status_code == 200:
-        meals = response.json()['meals']
-        nutrients = response.json()['nutrients']
-        return meals, nutrients
-    else:
-        return None, None
-meals = get_meals(2500, None, None)
-print(meals)
-# Step 5: Predict Daily Caloric Needs and Generate Diet Plan
-def predict_calories(age, weight, gender, activity_level, goal):
-    """Predict the daily calorie intake based on user inputs."""
-    user_input = pd.DataFrame({
-        'age': [age],
-        'weight': [weight],
-        'gender': [0 if gender.lower() == 'male' else 1],
-        'activity_level': [activity_level],
-        'goal': [0 if goal == 'lose weight' else 1 if goal == 'maintain' else 2]
-    })
-    
-    predicted_calories = model.predict(user_input)
-    return int(predicted_calories[0])
+    # Debug: print the target calorie distribution
+    print(f"Target Meal Calorie Distribution: {meal_distributions}")
 
-def generate_diet_plan(age, weight, gender, activity_level, goal, dietary_restrictions, allergies):
-    """Generate a personalized diet plan based on user preferences and predicted calories."""
-    # Predict daily caloric needs
-    predicted_calories = predict_calories(age, weight, gender, activity_level, goal)
-    
-    # Get meals from Spoonacular API
-    meals, nutrients = get_meals(predicted_calories, dietary_restrictions, allergies)
-    
-    if meals:
-        diet_plan = []
-        for meal in meals:
-            # Only access the title string directly, no need for title()
-            diet_plan.append({
-                'title': meal['title'],  # Use the title directly as a string
-                'meal_url': f"https://spoonacular.com/recipes/{meal['title']}-{meal['id']}",
-                'image': meal['image']
+    for meal_time, target_calories in meal_distributions.items():
+        # Sort suitable meals by proximity to the target calories
+        suitable_meals_for_time = sorted(suitable_meals, key=lambda meal: abs(meal["calories"] - target_calories))
+        
+        # Exclude already chosen meals
+        suitable_meals_for_time = [meal for meal in suitable_meals_for_time if meal not in chosen_meals]
+        
+        # Pick the best match for the target calories and ensure variety
+        if suitable_meals_for_time:
+            chosen_meal = suitable_meals_for_time[0]  # Get the closest meal
+            chosen_meals.append(chosen_meal)  # Add to the list of chosen meals
+            meal_plan.append({
+                "meal_time": meal_time.title(),
+                "name": chosen_meal["name"],
+                "calories": chosen_meal["calories"],
+                "protein": chosen_meal["protein"],
+                "carbs": chosen_meal["carbs"],
+                "fats": chosen_meal["fats"]
             })
-        return diet_plan, nutrients
-    else:
-        return "Sorry, no meals found for your preferences.", None
 
-def handle_form_submission(age, weight, gender, activity_level, goal, dietary_restrictions, allergies):
-    """Handle the form submission and generate a diet plan based on user input."""
-    return generate_diet_plan(age, weight, gender, activity_level, goal, dietary_restrictions, allergies)
+    # Calculate total nutrients
+    total_nutrients = {
+        "calories": sum([meal["calories"] for meal in meal_plan]),
+        "protein": sum([meal["protein"] for meal in meal_plan]),
+        "carbs": sum([meal["carbs"] for meal in meal_plan]),
+        "fats": sum([meal["fats"] for meal in meal_plan])
+    }
+
+    # Debug: print total nutrients and the final meal plan
+    print(f"Final Meal Plan: {meal_plan}")
+    print(f"Total Nutrients: {total_nutrients}")
+
+    return meal_plan, total_nutrients
+# Function to generate meals based on predicted calories and preferences
+def handle_form_submission(age, weight, gender, activity_level, goal, dietary_restrictions, allergies, vegetarian):
+    predicted_calories = generate_calories(age, weight, gender, activity_level, goal)
+    
+    # Debug: print predicted calories to ensure correctness
+    print(f"Predicted Calories: {predicted_calories}")
+    
+    diet_plan, nutrients = generate_meals(predicted_calories, vegetarian, dietary_restrictions, allergies)
+    
+    # Debug: print the diet plan and nutrients
+    print(f"Generated Diet Plan: {diet_plan}")
+    print(f"Generated Nutrients: {nutrients}")
+    
+    return diet_plan, nutrients
