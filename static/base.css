@@ -40,7 +40,8 @@ textarea {
 header {
   background-color: #fff;
   border-bottom: 2px solid #ddd;
-  padding: 15px 0;
+  padding: 5px;
+  height: 80px;
 }
 
 .container {
@@ -52,7 +53,7 @@ header {
 }
 
 .logo h1 {
-  font-size: 2rem;
+  font-size: 1.5rem;
   color: black;
 }
 .logo_image{
@@ -63,7 +64,7 @@ header {
 nav ul {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 15px;
 }
 
 nav ul li a {
