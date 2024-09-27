@@ -1,3 +1,41 @@
+/* General Body Styling */
+body {
+  font-family: 'Raleway', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+/* Header Styling */
+header {
+  background-color: #28a745;
+  padding: 20px 0;
+  color: white;
+  text-align: center;
+}
+
+header .logo h1 {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 30px;
+  margin: 0;
+}
+
+header nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+header nav ul li {
+  display: inline-block;
+  margin: 0 15px;
+}
+
+header nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
 /* Diet Plan Section */
 #diet-plan {
   display: flex;
@@ -28,17 +66,26 @@
   color: #555;
 }
 
-.diet-plan-content ul {
-  list-style: disc;
-  margin-left: 20px;
+/* Form Styling */
+form {
+  margin-bottom: 30px;
 }
 
-.diet-plan-content ul li {
-  margin-bottom: 10px;
+form label {
+  display: block;
+  margin-top: 10px;
+  text-align: left;
 }
 
-/* Centering the button */
-.diet-plan-content .btn {
+form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+form button {
   display: inline-block;
   padding: 12px 30px;
   background-color: #28a745;
@@ -49,16 +96,62 @@
   transition: background-color 0.3s ease, color 0.3s ease;
   cursor: pointer;
   margin-top: 20px;
-  text-align: center; /* Ensure the button is centered */
+  border: none;
 }
 
-.diet-plan-content .btn:hover {
+form button:hover {
   background-color: #218838;
 }
 
+/* Result Styling */
 #diet-result {
-  margin-top: 20px;
+  margin-top: 30px;
   font-size: 1.2rem;
   color: #555;
   text-align: center;
+}
+
+#diet-result h3 {
+  font-size: 2rem;
+  color: #28a745;
+  margin-bottom: 20px;
+}
+
+#diet-result ul {
+  list-style: none;
+  padding: 0;
+}
+
+#diet-result ul li {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+#diet-result img {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#diet-result p {
+  font-size: 1rem;
+  color: #333;
+}
+
+#diet-result a {
+  text-decoration: none;
+  color: #28a745;
+  font-weight: bold;
+}
+
+#diet-result a:hover {
+  color: #218838;
+}
+
+/* Footer Styling */
+footer {
+  background-color: #28a745;
+  padding: 20px;
+  text-align: center;
+  color: white;
 }

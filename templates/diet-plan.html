@@ -11,31 +11,24 @@
       href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;700&display=swap"
       rel="stylesheet"
     />
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Diet Plan</title>
-    <link rel="stylesheet" href="static/base.css" />
-    <link rel="stylesheet" href="static/diet-plan.css" />
+    <!-- Correctly linking the CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='diet-plan.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
   </head>
   <body>
     <header>
       <div class="container bebas">
         <div class="logo bebas">
-          <h1 style="font-size: 30px">CALORIE CRUSH</h1>
+          <h1>CALORIE CRUSH</h1>
         </div>
         <nav>
           <ul>
             <li class="raleway"><a href="/">Home</a></li>
-            <li class="raleway">
-              <a href="/fitness-plan-page">Fitness Plan</a>
-            </li>
             <li class="raleway"><a href="/diet-plan-page">Diet Plan</a></li>
-            <li class="raleway"><a href="/community-page">Community</a></li>
-            <li class="raleway"><a href="/progress-page">Progress</a></li>
-            <li class="raleway"><a href="/contact-us-page">Contact Us</a></li>
-            <li class="raleway login-btn"><a href="/login-profile-page">Profile</a></li>
           </ul>
         </nav>
       </div>
@@ -45,66 +38,65 @@
       <div class="diet-plan-content raleway">
         <h2>Personalized Diet Plans for Every Goal</h2>
         <p>
-          Achieving your fitness and wellness goals starts with the right
-          nutrition. At Calorie Crush, we offer custom diet plans designed to
-          meet your unique needs, whether you're looking to lose weight, gain
-          muscle, or simply eat healthier. Our AI-powered system tailors
-          recommendations based on your goals, dietary preferences, and
-          lifestyle, ensuring that your plan is not only effective but also
-          enjoyable.
+          Input your personal details and dietary preferences below, and our system will generate a custom meal plan tailored to your needs.
         </p>
-        <p>
-          Our plans focus on balanced nutrition, emphasizing whole foods and
-          proper macronutrient ratios to help you stay energized and satiated
-          throughout the day. Whether you follow a vegetarian, low-carb, or
-          high-protein diet, we’ve got you covered with meals that are easy to
-          prepare and delicious to eat.
-        </p>
-        <p>Here’s how it works:</p>
 
-        <ul>
-          <li>
-            <b>Input your preferences:</b> We’ll ask you a few questions about
-            your dietary restrictions, favorite foods, and fitness goals.
-          </li>
-          <li>
-            <b>Get your plan:</b> Based on your profile, we’ll generate a
-            customized meal plan designed to hit your target macros and calorie
-            intake.
-          </li>
-          <li>
-            <b>Track your progress:</b> Use the diet plan regularly, and adjust
-            as needed with the help of our in-built analytics to track your
-            progress.
-          </li>
-        </ul>
-        <p>
-          Click the button below to generate your diet plan and take the first
-          step toward a healthier you.
-        </p>
-        <button class="btn">Create My Diet Plan Now</button>
+        <!-- Diet Plan Form -->
         <form action="{{ url_for('generate_diet_plan') }}" method="post">
-          <label for="cheat_meals">Cheat Meal Preferences:</label>
-          <input type="text" id="cheat_meals" name="cheat_meals" placeholder="e.g. Pizza, Ice Cream">
-      
-          <label for="allergies">Allergies:</label>
-          <input type="text" id="allergies" name="allergies" placeholder="e.g. Nuts, Dairy">
-      
+          <label for="age">Age:</label>
+          <input type="number" id="age" name="age" placeholder="Enter your age" required>
+
+          <label for="weight">Weight (kg):</label>
+          <input type="number" id="weight" name="weight" placeholder="Enter your weight in kg" required>
+
+          <label for="gender">Gender:</label>
+          <input type="text" id="gender" name="gender" placeholder="Enter your gender" required>
+
+          <label for="activity_level">Activity Level (1-5):</label>
+          <input type="number" id="activity_level" name="activity_level" placeholder="Enter activity level (1 - sedentary to 5 - very active)" required>
+
+          <label for="goal">Goal (e.g., lose weight, gain muscle):</label>
+          <input type="text" id="goal" name="goal" placeholder="Your goal" required>
+
           <label for="dietary_restrictions">Dietary Restrictions:</label>
-          <input type="text" id="dietary_restrictions" name="dietary_restrictions" placeholder="e.g. Vegan, Gluten-free">
-      
+          <input type="text" id="dietary_restrictions" name="dietary_restrictions" placeholder="e.g., Vegan, Gluten-free">
+
+          <label for="allergies">Allergies:</label>
+          <input type="text" id="allergies" name="allergies" placeholder="e.g., Nuts, Dairy">
+          
           <button type="submit">Generate Diet Plan</button>
-      </form>
+        </form>
+
+        <div id="diet-result">
+          {% if diet_plan %}
+              <h3>Your Personalized Meals</h3>
+              <ul>
+                  {% for meal in diet_plan %}
+                      <li>
+                          <!-- Use Jinja's | title filter to format the string -->
+                          <h4>{{ meal.title | title }}</h4>
+                          <img src="{{ meal.image }}" alt="{{ meal.title }}" style="max-width: 300px;">
+                          <p><a href="{{ meal.meal_url }}" target="_blank">View Recipe</a></p>
+                      </li>
+                  {% endfor %}
+              </ul>
+      
+              <h3>Total Nutritional Information for the Day:</h3>
+              <p>Calories: {{ nutrients.calories }} kcal</p>
+              <p>Protein: {{ nutrients.protein }} g</p>
+              <p>Carbohydrates: {{ nutrients.carbohydrates }} g</p>
+              <p>Fat: {{ nutrients.fat }} g</p>
+      
+          {% else %}
+              <p>Submit the form to generate your diet plan.</p>
+          {% endif %}
+      </div>
       </div>
     </section>
 
     <footer class="raleway">
-      <div class="containter">
+      <div class="container">
         <p>2024 Calorie Crush. Created with ❤️ by Abhimanyu and Suyash.</p>
-        <p>
-          For any inquires, feel free to
-          <a style="color: white" href="#contact">contact us</a>
-        </p>
       </div>
     </footer>
   </body>

@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from datetime import datetime
 import random
-from diet_plan_gen import create_personalized_diet_plans as cdp
+from diet_plan_gen import *
 
 app = Flask(__name__)
 app.secret_key = "\xae7)\xa0\n\xb9J\xa4\xe3\x9aD\xd6\xb0$&\xad\x1b\x8a\xc6z\x1d%V\xbe"
@@ -165,19 +165,22 @@ def index():
 def diet_plan_page():
     return render_template("diet-plan.html")
 
-@app.route("/generate-diet-plan", methods=["POST"])
+@app.route('/generate-diet-plan', methods=['POST'])
 def generate_diet_plan():
-    # Capture user input
-    cheat_meals = request.form.get("cheat_meals", "").split(",")
-    allergies = request.form.get("allergies", "").split(",")
-    dietary_restrictions = request.form.get("dietary_restrictions", "").split(",")
-
-    # AI-based logic to generate a diet plan
-    diet_plan = cdp(cheat_meals, allergies, dietary_restrictions)
-
-    # Render the diet plan template
-    return render_template("diet-plan.html", diet_plan=diet_plan)
-
+    # Collect user input from the form
+    age = int(request.form['age'])
+    weight = float(request.form['weight'])
+    gender = request.form['gender']
+    activity_level = int(request.form['activity_level'])
+    goal = request.form['goal']
+    dietary_restrictions = request.form['dietary_restrictions']
+    allergies = request.form['allergies']
+    
+    # Call the AI/ML-based diet plan generator
+    diet_plan, nutrients = handle_form_submission(age, weight, gender, activity_level, goal, dietary_restrictions, allergies)
+    
+    # Render the same template, but now with the generated diet plan
+    return render_template('diet-plan.html', diet_plan=diet_plan, nutrients=nutrients)
 
 @app.route("/fitness-plan-page")
 def fitness_plan_page():
