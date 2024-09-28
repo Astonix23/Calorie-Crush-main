@@ -1,6 +1,6 @@
 /* Form container inside the log-workout section */
 #log-workout {
-    flex: 1;  /* Ensure the main section takes the available height */
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -113,46 +113,44 @@
           }
         };
 
-        // Total Workouts Chart (Doughnut)
         const ctxWorkout = document.getElementById('workoutChart').getContext('2d');
         new Chart(ctxWorkout, {
           type: 'doughnut',
           data: {
             labels: ['Completed', 'Remaining'],
             datasets: [{
-              data: [75, 25],  // Example data (replace with dynamic data)
+              data: [75, 25],
               backgroundColor: ['#28a745', '#ddd']
             }]
           },
           options: chartOptions
         });
 
-        // Goal Progress Chart (Doughnut)
         const ctxGoal = document.getElementById('goalChart').getContext('2d');
         new Chart(ctxGoal, {
           type: 'doughnut',
           data: {
             labels: ['Achieved', 'Pending'],
             datasets: [{
-              data: [60, 40],  // Example data (replace with dynamic data)
+              data: [60, 40],
               backgroundColor: ['#28a745', '#ddd']
             }]
           },
           options: chartOptions
         });
 
-        // High-quality Recent Workouts Chart (Bar Chart)
+        
         const ctxRecent = document.getElementById('recentWorkoutsChart').getContext('2d');
         new Chart(ctxRecent, {
           type: 'bar',
           data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],  // Data reference
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             datasets: [{
-              label: '',  // No label for the dataset
-              data: [30, 40, 20, 50, 60, 45, 35],  // Example data (replace with dynamic data)
+              label: '',
+              data: [30, 40, 20, 50, 60, 45, 35],
               backgroundColor: '#28a745',
               borderColor: '#28a745',
-              borderWidth: 1  // Thicker borders for high-quality
+              borderWidth: 1
             }]
           },
           options: {
@@ -160,14 +158,14 @@
             maintainAspectRatio: true,
             scales: {
               x: {
-                display: false  // Hide day labels
+                display: false
               },
               y: {
                 beginAtZero: true,
                 ticks: {
                   font: {
-                    size: 14,  // Improved font size
-                    family: 'Raleway',  // Use a good web font
+                    size: 14,
+                    family: 'Raleway',
                     weight: 'bold'
                   }
                 }
@@ -175,19 +173,19 @@
             },
             plugins: {
               legend: {
-                display: false,  // Hide legend as it has no label
+                display: false,
               },
               tooltip: {
                 backgroundColor: '#333',
                 titleColor: '#fff',
                 bodyColor: '#fff',
                 titleFont: {
-                  size: 16,  // Improve font size in tooltips
+                  size: 16,
                   family: 'Raleway',
                   weight: 'bold'
                 },
                 bodyFont: {
-                  size: 14,  // Body font size in tooltips
+                  size: 14,
                   family: 'Raleway',
                   weight: 'normal'
                 }
@@ -195,8 +193,8 @@
             },
             elements: {
               bar: {
-                borderRadius: 4,  // Add rounded corners for a polished look
-                barThickness: 30  // Adjust bar thickness for better visibility
+                borderRadius: 4,
+                barThickness: 30
               }
             }
           }

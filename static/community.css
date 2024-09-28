@@ -262,15 +262,15 @@
 
 /* Center the button container */
 .new-post-button {
-  text-align: center; /* Use this to center the button horizontally */
-  margin-bottom: 30px; /* Add spacing below the button */
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 /* General Button Styling */
 .btn {
-  display: inline-block; /* Ensure it's treated as an inline element */
+  display: inline-block;
   padding: 12px 30px;
-  background-color: #28a745; /* Keep your brand color, or change it if needed */
+  background-color: #28a745;
   color: white;
   border-radius: 5px;
   text-decoration: none;
@@ -281,7 +281,7 @@
 
 /* Button hover effect */
 .btn:hover {
-  background-color: #218838; /* Darker green on hover */
+  background-color: #218838;
 }
 
 footer {

@@ -96,8 +96,8 @@ body {
 }
 
 canvas {
-  width: 150px !important;  /* Fixed size for consistent circular chart */
-  height: 150px !important;  /* Fixed size for consistent circular chart */
+  width: 150px !important;
+  height: 150px !important;
 }
 
 /* Footer Styles */

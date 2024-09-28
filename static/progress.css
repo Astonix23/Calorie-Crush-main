@@ -55,9 +55,9 @@
 /* Grid Layout for Charts */
 .chart-section {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two charts per row */
-  gap: 40px; /* More space between the charts */
-  width: 90%; /* Take up more width on the screen */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  width: 90%;
   margin-bottom: 60px;
 }
 
@@ -65,37 +65,37 @@
 .chart-container {
   background-color: #fff;
   padding: 20px;
-  border-radius: 15px; /* Slightly rounded corners for a modern feel */
+  border-radius: 15px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 400px; /* Uniform height for all charts */
-  position: relative; /* Ensures proper legend positioning */
+  height: 400px;
+  position: relative;
 }
 
 /* Titles for Charts */
 .chart-container h3 {
   font-size: 1.6rem;
   color: #333;
-  margin-bottom: 15px; /* Consistent margin under the title */
+  margin-bottom: 15px;
 }
 
 /* Chart Canvases */
 canvas.bar-graph,
 canvas.doughnut-graph,
 canvas.line-graph {
-  width: 100%; /* Full width */
-  height: 300px; /* Consistent height for all charts */
+  width: 100%;
+  height: 300px;
   display: block;
 }
 
 /* Legends */
 .chartjs-legend {
   margin-top: 10px;
-  margin-bottom: 15px; /* Add space below legends */
-  font-size: 1rem; /* Consistent font size for all legends */
+  margin-bottom: 15px;
+  font-size: 1rem;
   text-align: center;
 }
 header {
@@ -119,19 +119,19 @@ header {
 }
 
 .logo_image {
-  width: 80px;  /* Adjusted size */
-  height: auto;  /* Maintain aspect ratio */
+  width: 80px;
+  height: auto;
   margin-right: 10px;
 }
 
 nav ul {
   list-style: none;
   display: flex;
-  gap: 25px;  /* Adjusted spacing between menu items */
+  gap: 25px;
 }
 
 nav ul li a {
-  font-size: 1.1rem;  /* Adjusted font size */
+  font-size: 1.1rem;
   text-decoration: none;
   color: #333;
   font-weight: bold;
