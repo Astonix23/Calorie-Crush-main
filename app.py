@@ -10,7 +10,6 @@ app.secret_key = "\xae7)\xa0\n\xb9J\xa4\xe3\x9aD\xd6\xb0$&\xad\x1b\x8a\xc6z\x1d%
 
 COMMUNITY_DB_FILE = "community_database.json"
 
-
 EXERCISE_CATEGORIES = {
     "Upper Body": {
         "Bodyweight": [
@@ -139,13 +138,10 @@ EXERCISE_CATEGORIES = {
     },
 }
 
-
 def generate_workout(fitness_goal, experience_level, equipment):
-    # Sets and reps configuration based on experience level
     sets, reps, rest_period, additional_exercises = 2, 10, 60, 0
     supersets, tempo_control, pyramid_sets = False, False, False
 
-    # Modify intensity based on experience level
     if experience_level == "Beginner":
         sets, reps, rest_period = 2, 10, 60
     elif experience_level == "Intermediate":
@@ -157,23 +153,20 @@ def generate_workout(fitness_goal, experience_level, equipment):
         supersets = True
         tempo_control = True
         additional_exercises = 2
-        pyramid_sets = True  # Add pyramid-style training for advanced users
+        pyramid_sets = True
 
     workout_plan = []
     day_count = 1
 
-    # Helper to generate exercises based on categories and equipment
     def generate_day_plan(day_type):
         exercises = []
         for equip in equipment:
             exercises += EXERCISE_CATEGORIES[day_type].get(equip, [])
 
-        # Add additional exercises for intermediate/advanced users
         exercises = random.sample(
             exercises, min(4 + additional_exercises, len(exercises))
         )
 
-        # Apply advanced techniques for advanced users
         if supersets:
             exercises = [
                 f"{ex1} + {ex2} 🔴" for ex1, ex2 in zip(exercises[::2], exercises[1::2])
@@ -185,7 +178,6 @@ def generate_workout(fitness_goal, experience_level, equipment):
 
         return exercises
 
-    # Upper Body Day
     upper_body_exercises = generate_day_plan("Upper Body")
     workout_plan.append(
         {
@@ -198,7 +190,6 @@ def generate_workout(fitness_goal, experience_level, equipment):
     )
     day_count += 1
 
-    # Lower Body Day
     lower_body_exercises = generate_day_plan("Lower Body")
     workout_plan.append(
         {
@@ -211,7 +202,6 @@ def generate_workout(fitness_goal, experience_level, equipment):
     )
     day_count += 1
 
-    # Full Body Day
     full_body_exercises = generate_day_plan("Full Body")
     workout_plan.append(
         {
@@ -224,7 +214,6 @@ def generate_workout(fitness_goal, experience_level, equipment):
     )
     day_count += 1
 
-    # Cardio/Rest Day (Optional for Advanced)
     if (
         fitness_goal in ["Lose Weight", "Increase Endurance"]
         or experience_level != "Beginner"
@@ -241,9 +230,7 @@ def generate_workout(fitness_goal, experience_level, equipment):
             }
         )
 
-    # Optional advanced days for upper and lower body
     if experience_level != "Beginner":
-        # Upper Body 2
         upper_body_exercises_2 = generate_day_plan("Upper Body")
         workout_plan.append(
             {
@@ -256,7 +243,6 @@ def generate_workout(fitness_goal, experience_level, equipment):
         )
         day_count += 1
 
-        # Lower Body 2
         lower_body_exercises_2 = generate_day_plan("Lower Body")
         workout_plan.append(
             {
@@ -268,51 +254,36 @@ def generate_workout(fitness_goal, experience_level, equipment):
             }
         )
 
-    # Save workout plan to session
     session["generated_plan"] = workout_plan
-    session["current_day"] = 0  # Start from Day 1
+    session["current_day"] = 0
 
     return workout_plan
 
-
 @app.route("/generate-fitness-plan", methods=["POST"])
 def generate_fitness_plan():
-    # Get form data
     fitness_goal = request.form.get("goal")
     experience_level = request.form.get("experience")
     equipment = request.form.getlist("equipment")
-
-    # Generate workout plan using the advanced generator
     workout_plan = generate_workout(fitness_goal, experience_level, equipment)
-
-    # Render the fitness plan page with the generated workout plan
     return render_template("fitness-plan.html", generated_plan=workout_plan)
 
-
-# Route to display the form for creating the fitness plan
 @app.route("/fitness-plan-page", methods=["GET"])
 def fitness_plan_page():
     return render_template("fitness-plan.html")
-
 
 def load_users():
     try:
         with open("users.json", "r") as file:
             users_data = json.load(file)
-            # Ensure the file has a valid structure, even if it's empty
             if "users" not in users_data:
                 return {"users": []}
             return users_data
     except (FileNotFoundError, json.JSONDecodeError):
-        # If the file is missing or empty/corrupt, return an empty structure
         return {"users": []}
 
-
-# Save users to the database
 def save_users(users):
     with open("users.json", "w") as file:
         json.dump(users, file, indent=4)
-
 
 def load_database():
     try:
@@ -321,25 +292,17 @@ def load_database():
     except FileNotFoundError:
         return {"workouts": []}
 
-
-# Save the database
 def save_database(data):
     with open("database.json", "w") as file:
         json.dump(data, file, indent=4)
 
-
-# Existing Routes
 @app.route("/")
 def index():
     logged_in = "user" in session
-    # Check if the user is logged in by looking for the 'user' key in the session
     if "user" in session:
-        # The user is logged in, so they can see the full version of the page
         return render_template("index.html", logged_in=True)
     else:
-        # The user is not logged in, show a restricted version of the page
         return render_template("index.html", logged_in=False)
-
 
 @app.route("/diet-plan-page")
 def diet_plan():
@@ -347,20 +310,13 @@ def diet_plan():
 
 @app.route("/generate-diet-plan", methods=["POST"])
 def generate_diet_plan():
-    # Collect user input from the form
     age = int(request.form["age"])
     weight = float(request.form["weight"])
     gender = request.form["gender"]
     activity_level = int(request.form["activity_level"])
     goal = request.form["goal"]
     dietary_restrictions = request.form.get("dietary_restrictions", "")
-    vegetarian = request.form.get("vegetarian") == "Yes"  # Handle vegetarian preference
-
-    # Debug: print user inputs to check if they are captured correctly
-    print(f"Age: {age}, Weight: {weight}, Gender: {gender}, Activity Level: {activity_level}")
-    print(f"Goal: {goal}, Dietary Restrictions: {dietary_restrictions}, Vegetarian: {vegetarian}")
-
-    # Generate the diet plan (using your handle_form_submission function)
+    vegetarian = request.form.get("vegetarian") == "Yes"
     diet_plan, nutrients = handle_form_submission(
         age,
         weight,
@@ -370,37 +326,22 @@ def generate_diet_plan():
         dietary_restrictions,
         vegetarian
     )
-
-    # Debug: print diet plan and nutrients to check if they are generated correctly
-    print(f"Diet Plan: {diet_plan}")
-    print(f"Nutrients: {nutrients}")
-
-    # Render the diet plan page with the generated diet plan
     return render_template("diet-plan.html", diet_plan=diet_plan, nutrients=nutrients)
-
-
 
 @app.route("/log-workout-page", methods=["GET", "POST"])
 def log_workout():
     database = load_database()
-
     if request.method == "POST":
         weight = request.form.get("weight")
         duration = request.form.get("duration")
         exercises = request.form.getlist("exercise")
-
-        # MET value: assume moderate intensity for now
         MET_value = 5
-
-        # Calories burned calculation (basic formula)
         try:
             weight = float(weight)
             duration = int(duration)
             calories_burned = (MET_value * weight * 3.5 / 200) * duration
         except ValueError:
-            return "Invalid input", 400  # Handle invalid inputs gracefully
-
-        # Create a new workout entry with calories burned
+            return "Invalid input", 400
         new_workout = {
             "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "weight": weight,
@@ -408,66 +349,40 @@ def log_workout():
             "exercises": exercises,
             "calories_burned": round(
                 calories_burned, 2
-            ),  # This line ensures calories are recorded
+            ),
             "notes": request.form.get("notes", ""),
         }
-
-        # Add new workout to the database and save it
         database["workouts"].append(new_workout)
         save_database(database)
-
-        # Increment the day index after logging the workout
         session["current_day"] = session.get("current_day", 0) + 1
-
-        # Redirect to the same form page after submission
         return redirect(url_for("log_workout"))
-
-    # For GET requests, render the log workout page
-    # Fetch the current day’s exercises from the fitness plan
     generated_plan = session.get("generated_plan", [])
     current_day = session.get("current_day", 0)
-
-    # Ensure we don't go out of bounds with the current day index
     if current_day >= len(generated_plan):
-        current_day = len(generated_plan) - 1  # Stay on the last day
-
-    # Get the exercises for the current day
+        current_day = len(generated_plan) - 1
     day_plan = generated_plan[current_day]
     exercises = day_plan["Exercises"]
-
     return render_template("log-workout.html", exercises=exercises, day=day_plan["Day"])
-
 
 @app.route("/progress-page")
 def progress_page():
-    database = load_database()  # Load the database
-
-    # Retrieve workout data
+    database = load_database()
     workouts = database.get("workouts", [])
-
-    # Safely calculate total calories burned
     total_calories_burned = sum(
         workout.get("calories_burned", 0) for workout in workouts
     )
-
-    # Sum total workout time
     total_workout_time = sum(workout.get("duration", 0) for workout in workouts)
-
-    # Get last 7 workout durations
     if workouts:
-        recent_workouts = workouts[-7:]  # Get the last 7 workouts
+        recent_workouts = workouts[-7:]
         workout_durations = [workout.get("duration", 0) for workout in recent_workouts]
     else:
-        workout_durations = [0] * 7  # Default to 0 if no data
-
-    # Get latest body weight (from the last logged workout)
+        workout_durations = [0] * 7
     body_weight = (
         workouts[-1]["weight"] if workouts else 70
-    )  # Default to 70 if no workout data
+    )
     body_measurements = (
         [workout["weight"] for workout in workouts[-4:]] if workouts else []
-    )  # Last 4 weight entries for the line graph
-
+    )
     return render_template(
         "progress.html",
         total_workout_time=total_workout_time,
@@ -475,10 +390,9 @@ def progress_page():
         workout_data=workout_durations,
         body_weight=body_weight,
         body_measurements=body_measurements,
-        goal_progress=[80, 20],  # Example goal progress: 80% done
-        goal_completion=80,  # Assuming goal_progress[0] is the completion percentage
+        goal_progress=[80, 20],
+        goal_completion=80,
     )
-
 
 @app.route("/signup-page", methods=["GET", "POST"])
 def signup_page():
@@ -487,35 +401,25 @@ def signup_page():
         email = request.form["email"]
         password = request.form["password"]
         confirm_password = request.form["confirm-password"]
-
         if password != confirm_password:
             return "Passwords do not match", 400
-
         hashed_password = generate_password_hash(password)
         users_db = load_users()
-
-        # Check if the email is already registered
         for user in users_db["users"]:
             if user["email"] == email:
                 return "Email already exists", 400
-
         new_user = {"name": name, "email": email, "password": hashed_password}
         users_db["users"].append(new_user)
         save_users(users_db)
-
         return redirect(url_for("login_or_profile"))
-
     return render_template("signup.html")
-
 
 @app.route("/login-profile-page", methods=["GET", "POST"])
 def login_or_profile():
     if request.method == "POST":
         email = request.form["email"].lower()
         password = request.form["password"]
-
         users_db = load_users()
-
         for user in users_db["users"]:
             if user["email"].lower() == email:
                 if check_password_hash(user["password"], password):
@@ -524,56 +428,39 @@ def login_or_profile():
                 else:
                     error_message = "Invalid password. Please try again."
                     return render_template("login.html", error=error_message)
-
         error_message = "Email not found. Please try again."
         return render_template("login.html", error=error_message)
-
     if "user" in session:
-        # Load workout data from the database
         database = load_database()
         workouts = database.get("workouts", [])
-
-        # Get workout durations for the last 7 days
         if workouts:
-            recent_workouts = workouts[-7:]  # Get the last 7 workouts
+            recent_workouts = workouts[-7:]
             workout_durations = [workout.get("duration", 0) for workout in recent_workouts]
             workout_dates = [workout.get("date", "Unknown") for workout in recent_workouts]
         else:
-            workout_durations = [0] * 7  # Default to 0 if no data
+            workout_durations = [0] * 7
             workout_dates = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"]
-
-        # Retrieve weight data for the last few entries (or log)
         if workouts:
-            # Get the last 7 weight logs
             weight_progress = [workout.get("weight", 0) for workout in workouts[-7:]]
             weight_dates = [workout.get("date", "Unknown") for workout in workouts[-7:]]
         else:
-            weight_progress = [70, 69, 68, 67, 66, 65, 64]  # Example default data
+            weight_progress = [70, 69, 68, 67, 66, 65, 64]
             weight_dates = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"]
-
-        # Render the profile page with the workout and weight progress data
         return render_template(
             "profile.html",
             user=session["user"],
-            workout_data=workout_durations,  # Data for weekly workout durations
-            workout_dates=workout_dates,  # Dates for the workout logs
-            weight_progress=weight_progress,  # Data for weight progress
-            weight_dates=weight_dates,  # Dates for the weight logs
+            workout_data=workout_durations,
+            workout_dates=workout_dates,
+            weight_progress=weight_progress,
+            weight_dates=weight_dates,
         )
-
     return render_template("login.html")
-
-    # If not logged in, show login form
-    return render_template("login.html")
-
 
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect(url_for("login_or_profile"))
 
-
-# Blog-related routes
 posts = [
     {
         "id": 1,
@@ -584,37 +471,25 @@ posts = [
     }
 ]
 
-
 def load_community_database():
     try:
         with open("community_database.json", "r") as file:
             return json.load(file)
     except (FileNotFoundError, json.JSONDecodeError):
-        # If the file is missing or empty/corrupt, return an empty structure
         return {"posts": []}
-
 
 def save_community_database(data):
     with open("community_database.json", "w") as file:
         json.dump(data, file, indent=4)
 
+next_post_id = 2
 
-next_post_id = (
-    2  # This can be dynamically set by checking the highest ID in the file if needed
-)
-
-
-# Route to display the community page with blog posts
 @app.route("/community-page")
 def community_page():
-    # Load posts from the community database
     database = load_community_database()
     posts = database.get("posts", [])
-
     return render_template("community.html", posts=posts)
 
-
-# Route to create a new post
 @app.route("/create-post", methods=["GET", "POST"])
 def create_post():
     global next_post_id
@@ -622,7 +497,6 @@ def create_post():
         title = request.form.get("title")
         content = request.form.get("content")
         author = request.form.get("author")
-
         new_post = {
             "id": next_post_id,
             "title": title,
@@ -630,59 +504,36 @@ def create_post():
             "author": author,
             "comments": [],
         }
-
-        # Load the community database
         database = load_community_database()
-
-        # Add the new post to the database
         database["posts"].append(new_post)
         next_post_id += 1
-
-        # Save the updated community database
         save_community_database(database)
-
         return redirect(url_for("community_page"))
-
     return render_template("create-post.html")
 
-
-# Route to view post details including comments
 @app.route("/post/<int:post_id>")
 def post_detail(post_id):
-    # Load posts from the community database
     database = load_community_database()
     post = next((p for p in database["posts"] if p["id"] == post_id), None)
-
     if post:
         return render_template("post-detail.html", post=post)
     return "Post not found", 404
 
-
-# Route to add a comment to a post
 @app.route("/add-comment/<int:post_id>", methods=["POST"])
 def add_comment(post_id):
     author = request.form["author"]
     comment = request.form["comment"]
-
-    # Load the community database
     database = load_community_database()
-
-    # Find the correct post and append the comment
     for post in database["posts"]:
         if post["id"] == post_id:
             post["comments"].append({"author": author, "comment": comment})
             break
-
-    # Save the updated community database
     save_community_database(database)
-
     return redirect(url_for("post_detail", post_id=post_id))
-
 
 @app.route("/contact-us-page")
 def contact_us_page():
     return render_template("contact-us.html")
-
 
 if __name__ == "__main__":
     app.run(debug=True)
