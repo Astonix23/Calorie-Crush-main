@@ -84,6 +84,42 @@
             ],
             "calories_burned": 275.62,
             "notes": "biucvadhoi"
+        },
+        {
+            "date": "2024-09-28 21:50:23",
+            "weight": 45.0,
+            "duration": 60,
+            "exercises": [
+                "Band Tricep Pushdown + Band Pull-Apart \ud83d\udd34 \ud83d\udfe0 \ud83d\udd35",
+                "Band Bicep Curl + Band Chest Press \ud83d\udd34 \ud83d\udfe0 \ud83d\udd35",
+                "Decline Pushups + Diamond Pushups \ud83d\udd34 \ud83d\udfe0 \ud83d\udd35"
+            ],
+            "calories_burned": 236.25,
+            "notes": "Completed "
+        },
+        {
+            "date": "2024-09-28 21:56:19",
+            "weight": 60.0,
+            "duration": 60,
+            "exercises": [
+                "Dumbbell Lateral Raise + Tricep Dips \ud83d\udd34 \ud83d\udfe0 \ud83d\udd35",
+                "Dumbbell Bench Press + Dumbbell Tricep Kickback \ud83d\udd34 \ud83d\udfe0 \ud83d\udd35",
+                "Dumbbell Shoulder Press + Dumbbell Chest Fly \ud83d\udd34 \ud83d\udfe0 \ud83d\udd35"
+            ],
+            "calories_burned": 315.0,
+            "notes": ""
+        },
+        {
+            "date": "2024-09-28 22:07:17",
+            "weight": 60.0,
+            "duration": 60,
+            "exercises": [
+                "Band Tricep Pushdown + Dumbbell Shoulder Press \ud83d\udd34 \ud83d\udfe0 \ud83d\udd35",
+                "Dumbbell Bicep Curl + Band Pull-Apart \ud83d\udd34 \ud83d\udfe0 \ud83d\udd35",
+                "Band Bicep Curl + Dumbbell Hammer Curl \ud83d\udd34 \ud83d\udfe0 \ud83d\udd35"
+            ],
+            "calories_burned": 315.0,
+            "notes": ""
         }
     ],
     "body_measurements": [
