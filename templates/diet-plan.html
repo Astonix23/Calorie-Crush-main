@@ -16,7 +16,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Personalized Diet Plan | Calorie Crush</title>
     <link rel="stylesheet" href="/static/base.css" />
-    <link rel="stylesheet" href="/static/fitness-plan.css" /> <!-- Reuse same styles for consistency -->
+    <link rel="stylesheet" href="/static/fitness-plan.css" />
   </head>
   <body>
     <header>
@@ -46,14 +46,11 @@
         </nav>
       </div>
     </header>
-    <section id="fitness-plan"> <!-- Reusing the section ID for consistent styling -->
+    <section id="fitness-plan">
       <div class="fitness-plan-content raleway">
         <h2>Generate Your Personalized Diet Plan</h2>
-        <p>
-          Achieve your nutritional goals with a diet plan tailored to your preferences and lifestyle. Fill out the form below to generate a personalized diet plan.
-        </p>
+        <p>Achieve your nutritional goals with a diet plan tailored to your preferences and lifestyle. Fill out the form below to generate a personalized diet plan.</p>
 
-        <!-- Form for Diet Plan -->
         <form action="/generate-diet-plan" method="post">
           <h3>Fill in Your Information</h3>
 
@@ -67,7 +64,7 @@
           </select>
 
           <label for="weight">Weight (kg):</label>
-          <input type="number" id="weight" name="weight" class="input-select" required>
+          <input type="number" id="weight" name="weight" class="input-select" required />
 
           <label for="gender">Gender:</label>
           <select id="gender" name="gender" class="select-dropdown">
@@ -93,43 +90,46 @@
           </select>
 
           <label for="dietary_restrictions">Dietary Restrictions:</label>
-          <input type="text" id="dietary_restrictions" name="dietary_restrictions" class="input-select">
+          <select id="dietary_restrictions" name="dietary_restrictions" class="select-dropdown">
+            <option value="None">None</option>
+            <option value="Gluten-Free">Gluten-Free</option>
+            <option value="Dairy-Free">Dairy-Free</option>
+            <option value="Nut-Free">Nut-Free</option>
+            <option value="Vegan">Vegan</option>
+            <option value="Low-Carb">Low-Carb</option>
+          </select>
 
           <label for="vegetarian">Vegetarian Diet?</label>
           <select id="vegetarian" name="vegetarian" class="select-dropdown">
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
           </select>
-
-          <label for="allergies">Allergies:</label>
-          <input type="text" id="allergies" name="allergies" class="input-select">
 
           <button type="submit" class="btn">Generate My Diet Plan</button>
         </form>
 
-        <!-- Display the Diet Plan Result -->
         <div id="fitness-result">
           {% if diet_plan %}
-              <h3>Your Personalized Meal Plan</h3>
-              <ul>
-                  {% for meal in diet_plan %}
-                      <li>
-                          <h4>{{ meal.meal_time }}: {{ meal.name }}</h4>
-                          <p>Calories: {{ meal.calories }} kcal</p>
-                          <p>Protein: {{ meal.protein }}g</p>
-                          <p>Carbs: {{ meal.carbs }}g</p>
-                          <p>Fats: {{ meal.fats }}g</p>
-                      </li>
-                  {% endfor %}
-              </ul>
+            <h3>Your Personalized Meal Plan</h3>
+            <ul>
+              {% for meal in diet_plan %}
+                <li>
+                  <h4>{{ meal.meal_time }}: {{ meal.name }}</h4>
+                  <p>Calories: {{ meal.calories }} kcal</p>
+                  <p>Protein: {{ meal.protein }}g</p>
+                  <p>Carbs: {{ meal.carbs }}g</p>
+                  <p>Fats: {{ meal.fats }}g</p>
+                </li>
+              {% endfor %}
+            </ul>
 
-              <h3>Total Nutritional Summary:</h3>
-              <p>Calories: {{ nutrients.calories }} kcal</p>
-              <p>Protein: {{ nutrients.protein }}g</p>
-              <p>Carbs: {{ nutrients.carbohydrates }}g</p>
-              <p>Fats: {{ nutrients.fats }}g</p>
+            <h3>Total Nutritional Summary:</h3>
+            <p>Calories: {{ nutrients.calories }} kcal</p>
+            <p>Protein: {{ nutrients.protein }}g</p>
+            <p>Carbs: {{ nutrients.carbs }}g</p>
+            <p>Fats: {{ nutrients.fats }}g</p>
           {% else %}
-              <p>Submit the form to generate your personalized diet plan.</p>
+            <p>Submit the form to generate your personalized diet plan.</p>
           {% endif %}
         </div>
       </div>
@@ -138,9 +138,7 @@
     <footer class="raleway">
       <div class="container">
         <p>2024 Calorie Crush. Created with ❤️ by Your Team.</p>
-        <p>
-          For any inquiries, feel free to <a style="color: white" href="#contact">contact us</a>.
-        </p>
+        <p>For any inquiries, feel free to <a style="color: white" href="#contact">contact us</a>.</p>
       </div>
     </footer>
   </body>

@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="static/base.css" />
-    <link rel="stylesheet" href="static/progress.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;700&display=swap" rel="stylesheet" />
-
-    <title>Fitness Progress Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="static/base.css" />
+    <link rel="stylesheet" href="static/progress.css" />
+    <title>Professional Stats Dashboard</title>
     <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
@@ -21,7 +20,7 @@
         <div class="bebas logo">
           <nav>
             <ul>
-              <li><img src="static/logo.png" class="logo_image" /></li>
+              <li><img src="static/logo.png" alt="Calorie Crush Logo" class="logo_image" /></li>
               <li><h1 style="font-size: 30px">CALORIE CRUSH</h1></li>
             </ul>
           </nav>
@@ -29,16 +28,12 @@
         <nav>
           <ul>
             <li class="raleway"><a href="/">Home</a></li>
-            <li class="raleway">
-              <a href="/fitness-plan-page">Fitness Plan</a>
-            </li>
+            <li class="raleway"><a href="/fitness-plan-page">Fitness Plan</a></li>
             <li class="raleway"><a href="/diet-plan-page">Diet Plan</a></li>
             <li class="raleway"><a href="/community-page">Community</a></li>
             <li class="raleway"><a href="/progress-page">Progress</a></li>
             <li class="raleway"><a href="/contact-us-page">Contact Us</a></li>
-            <li class="raleway login-btn">
-              <a href="/login-profile-page">Profile</a>
-            </li>
+            <li class="raleway login-btn"><a href="/login-profile-page">Profile</a></li>
           </ul>
         </nav>
       </div>
@@ -60,42 +55,48 @@
           <p>{{ goal_completion }}%</p>
         </div>
         <div class="overview-card">
-          <button class="btn"><a href="/log-workout-page" style="color: white;">Log New Workout</a></button>
+          <button class="btn">
+            <a href="/log-workout-page" style="color: white;">Log New Workout</a>
+          </button>
         </div>
       </div>
 
       <!-- Charts Section -->
       <div class="chart-section">
+        <!-- Workout Progress (Bar Graph) -->
         <div class="chart-container">
           <h3>Workout Progress (Last 7 Days)</h3>
-          <canvas id="workoutChart"></canvas>
+          <canvas id="workoutChart" class="bar-graph"></canvas>
         </div>
 
-        <div class="chart-container">
-          <h3>Body Measurements</h3>
-          <canvas id="bodyMeasurementsChart"></canvas>
-        </div>
-
+        <!-- Goal Progress (Doughnut Chart) -->
         <div class="chart-container">
           <h3>Goal Progress</h3>
-          <canvas id="goalChart"></canvas>
+          <canvas id="goalChart" class="doughnut-graph"></canvas>
+        </div>
+
+        <!-- Weekly Calorie Burn (Bar Graph) -->
+        <div class="chart-container">
+          <h3>Weekly Calorie Burn</h3>
+          <canvas id="calorieBurnChart" class="bar-graph"></canvas>
+        </div>
+
+        <!-- Body Measurements (Line Graph) -->
+        <div class="chart-container">
+          <h3>Body Measurements</h3>
+          <canvas id="bodyMeasurementsChart" class="line-graph"></canvas>
         </div>
       </div>
     </section>
 
-    <footer class="raleway">
-      <div class="container">
-        <p>2024 Calorie Crush. Created with ❤️ by Abhimanyu and Suyash.</p>
-        <p>
-          For any inquiries, feel free to
-          <a style="color: white" href="#contact">contact us</a>
-        </p>
-      </div>
+    <footer>
+      <p>2024 Calorie Crush. Created with ❤️ by Abhimanyu and Suyash.</p>
+      <p>For any inquiries, feel free to <a style="color: white" href="#contact">contact us</a></p>
     </footer>
 
     <!-- Chart.js Script -->
     <script>
-      const modernOptions = {
+      const chartOptions = {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
@@ -106,7 +107,10 @@
           y: { beginAtZero: true, ticks: { font: { size: 12 } } },
           x: { ticks: { font: { size: 12 } } }
         },
-        elements: { line: { tension: 0.4 }, bar: { borderRadius: 10 } }
+        elements: {
+          line: { tension: 0.4 },
+          bar: { borderRadius: 10, barThickness: 20 } // Consistent bar thickness
+        }
       };
 
       // Workout Progress Chart
@@ -115,20 +119,13 @@
         type: 'bar',
         data: {
           labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          datasets: [{ label: 'Minutes of Exercise', data: {{ workout_data|tojson }}, backgroundColor: '#28a745', borderRadius: 10 }]
+          datasets: [{
+            label: 'Minutes of Exercise',
+            data: {{ workout_data | safe }},
+            backgroundColor: '#28a745'
+          }]
         },
-        options: modernOptions
-      });
-
-      // Body Measurements Chart
-      var ctxBody = document.getElementById('bodyMeasurementsChart').getContext('2d');
-      var bodyMeasurementsChart = new Chart(ctxBody, {
-        type: 'line',
-        data: {
-          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-          datasets: [{ label: 'Weight (kg)', data: {{ body_measurements|tojson }}, borderColor: '#28a745', fill: false, tension: 0.4 }]
-        },
-        options: modernOptions
+        options: chartOptions
       });
 
       // Goal Progress Chart
@@ -137,9 +134,45 @@
         type: 'doughnut',
         data: {
           labels: ['Completed', 'Remaining'],
-          datasets: [{ data: {{ goal_progress|tojson }}, backgroundColor: ['#28a745', '#ddd'], cutout: '80%' }]
+          datasets: [{
+            data: {{ goal_progress | safe }},
+            backgroundColor: ['#28a745', '#ddd'],
+            cutout: '70%'
+          }]
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 14 } } } } }
+        options: chartOptions
+      });
+
+      // Weekly Calorie Burn Chart
+      var ctxCalorieBurn = document.getElementById('calorieBurnChart').getContext('2d');
+      var calorieBurnChart = new Chart(ctxCalorieBurn, {
+        type: 'bar',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Calories Burned',
+            data: [500, 600, 700, 550, 650, 500, 600],
+            backgroundColor: '#28a745'
+          }]
+        },
+        options: chartOptions
+      });
+
+      // Body Measurements Line Graph
+      var ctxBody = document.getElementById('bodyMeasurementsChart').getContext('2d');
+      var bodyMeasurementsChart = new Chart(ctxBody, {
+        type: 'line',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+          datasets: [{
+            label: 'Body Weight (kg)',
+            data: {{ body_measurements | safe }},
+            borderColor: '#28a745',
+            backgroundColor: 'rgba(40, 167, 69, 0.2)',
+            fill: true
+          }]
+        },
+        options: chartOptions
       });
     </script>
   </body>

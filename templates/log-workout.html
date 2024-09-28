@@ -43,29 +43,31 @@
 
     <section id="log-workout">
         <div class="form-container">
-            <h2>Log Today's Workout</h2>
-            <form action="/log-workout-page" method="POST">
-                <label for="weight">Your Weight (kg)</label>
-                <input type="number" id="weight" name="weight" placeholder="Enter your weight" required />
+          <h2>Log Workout for {{ day }}</h2>
 
-                <label for="duration">Workout Duration (minutes)</label>
-                <input type="number" id="duration" name="duration" placeholder="Enter duration in minutes" required />
-
-                <h3>Select Exercises Completed</h3>
-                <div class="exercise-list">
-                    {% for exercise in exercises %}
-                    <div class="exercise-item">
-                        <input type="checkbox" id="exercise{{ loop.index }}" name="exercise" value="{{ exercise }}">
-                        <label for="exercise{{ loop.index }}">{{ exercise }}</label>
-                    </div>
-                    {% endfor %}
-                </div>
-
-                <label for="notes">Additional Notes</label>
-                <textarea id="notes" name="notes" rows="4" placeholder="Any comments..."></textarea>
-
-                <input type="submit" value="Log Workout">
-            </form>
+          <form action="/log-workout-page" method="POST">
+              <label for="weight">Your Weight (kg)</label>
+              <input type="number" id="weight" name="weight" placeholder="Enter your weight" required />
+          
+              <label for="duration">Workout Duration (minutes)</label>
+              <input type="number" id="duration" name="duration" placeholder="Enter duration in minutes" required />
+          
+              <h3>Select Exercises Completed for {{ day }}</h3>
+              <div class="exercise-list">
+                  {% for exercise in exercises %}
+                  <div class="exercise-item">
+                      <input type="checkbox" id="exercise{{ loop.index }}" name="exercise" value="{{ exercise }}">
+                      <label for="exercise{{ loop.index }}">{{ exercise }}</label>
+                  </div>
+                  {% endfor %}
+              </div>
+          
+              <label for="notes">Additional Notes</label>
+              <textarea id="notes" name="notes" rows="4" placeholder="Any comments..."></textarea>
+          
+              <input type="submit" value="Log Workout">
+          </form>
+          
         </div>
     </section>
 

@@ -51,7 +51,8 @@
       <div class="fitness-plan-content raleway">
         <h2>Personalized Fitness Plans for Every Goal</h2>
         <p>
-          Achieve your fitness goals with a workout plan tailored to your needs. Fill out the form below to create your personalized fitness plan.
+          Achieve your fitness goals with a workout plan tailored to your needs.
+          Fill out the form below to create your personalized fitness plan.
         </p>
 
         <!-- Form for Fitness Plan -->
@@ -74,47 +75,86 @@
 
           <label for="equipment">Select Available Equipment:</label>
           <div class="checkbox-group">
-            <label>
-              <input type="checkbox" name="equipment" value="Bodyweight" id="bodyweight" />
-              Bodyweight
-            </label>
-            <label>
-              <input type="checkbox" name="equipment" value="Dumbbells" id="dumbbells" />
-              Dumbbells
-            </label>
-            <label>
-              <input type="checkbox" name="equipment" value="Resistance Bands" id="resistance_bands" />
-              Resistance Bands
-            </label>
-            <label>
-              <input type="checkbox" name="equipment" value="Barbells" id="barbells" />
-              Barbells
-            </label>
-            <label>
-              <input type="checkbox" name="equipment" value="Kettlebells" id="kettlebells" />
-              Kettlebells
-            </label>
-            <label>
-              <input type="checkbox" name="equipment" value="Cardio" id="cardio" />
-              Cardio
-            </label>
+            <label
+              ><input
+                type="checkbox"
+                name="equipment"
+                value="Bodyweight"
+              />Bodyweight</label
+            >
+            <label
+              ><input
+                type="checkbox"
+                name="equipment"
+                value="Dumbbells"
+              />Dumbbells</label
+            >
+            <label
+              ><input
+                type="checkbox"
+                name="equipment"
+                value="Resistance Bands"
+              />Resistance Bands</label
+            >
+            <label
+              ><input
+                type="checkbox"
+                name="equipment"
+                value="Barbells"
+              />Barbells</label
+            >
+            <label
+              ><input
+                type="checkbox"
+                name="equipment"
+                value="Kettlebells"
+              />Kettlebells</label
+            >
+            <label
+              ><input
+                type="checkbox"
+                name="equipment"
+                value="Cardio"
+              />Cardio</label
+            >
           </div>
 
           <button type="submit" class="btn">Create My Fitness Plan</button>
         </form>
-
+        <div class="workout-legend">
+          <h3>Legend</h3>
+          <ul>
+            <li>
+              <span class="legend-color supersets"></span> Superset: Two
+              exercises performed back-to-back without rest
+            </li>
+            <li>
+              <span class="legend-color pyramid"></span> Pyramid Set: Reps
+              change within the same exercise
+            </li>
+            <li>
+              <span class="legend-color tempo"></span> Tempo (4-2-1): Slow
+              eccentric control, 4 seconds lowering, 2 seconds hold, 1 second
+              lift
+            </li>
+          </ul>
+        </div>
         <!-- Display Fitness Plan -->
         <div id="fitness-result">
           {% if generated_plan %}
           <h3>Your Personalized Fitness Plan:</h3>
           <ul>
             {% for day in generated_plan %}
-              <li><strong>{{ day['Day'] }}</strong></li>  <!-- Display Day 1, Day 2, etc. -->
-              <ul>
-                {% for exercise in day['Exercises'] %}
-                  <li>{{ exercise }} - {{ day['Sets'] }} Sets of {{ day['Reps'] }} Reps</li>
-                {% endfor %}
-              </ul>
+            <li><strong>{{ day['Day'] }}</strong></li>
+            <ul>
+              {% for exercise in day['Exercises'] %}
+              <li>
+                {{ exercise|safe }} - {{ day['Sets'] }} Sets of {{ day['Reps']
+                }} Reps
+              </li>
+              <!-- Render safely -->
+              {% endfor %}
+            </ul>
             {% endfor %}
           </ul>
           {% endif %}
@@ -126,7 +166,10 @@
     <footer class="raleway">
       <div class="container">
         <p>2024 Calorie Crush. Created with ❤️ by Your Team.</p>
-        <p>For any inquiries, feel free to <a style="color: white" href="#contact">contact us</a>.</p>
+        <p>
+          For any inquiries, feel free to
+          <a style="color: white" href="#contact">contact us</a>.
+        </p>
       </div>
     </footer>
   </body>

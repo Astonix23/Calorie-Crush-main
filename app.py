@@ -11,32 +11,118 @@ app.secret_key = "\xae7)\xa0\n\xb9J\xa4\xe3\x9aD\xd6\xb0$&\xad\x1b\x8a\xc6z\x1d%
 COMMUNITY_DB_FILE = "community_database.json"
 
 
-
 EXERCISE_CATEGORIES = {
     "Upper Body": {
-        "Bodyweight": ["Pushups", "Tricep Dips", "Plank"],
+        "Bodyweight": [
+            "Pushups",
+            "Tricep Dips",
+            "Plank to Pushup",
+            "Decline Pushups",
+            "Diamond Pushups",
+            "Plank",
+        ],
         "Dumbbells": [
             "Dumbbell Bench Press",
             "Dumbbell Shoulder Press",
             "Dumbbell Rows",
             "Dumbbell Bicep Curl",
+            "Dumbbell Lateral Raise",
+            "Dumbbell Tricep Kickback",
+            "Dumbbell Chest Fly",
+            "Dumbbell Arnold Press",
+            "Dumbbell Renegade Row",
+            "Dumbbell Hammer Curl",
+            "Dumbbell Shrugs",
         ],
-        "Barbells": ["Barbell Bench Press", "Barbell Shoulder Press", "Barbell Rows"],
-        "Kettlebells": ["Kettlebell Shoulder Press", "Kettlebell Rows", "Kettlebell Tricep Extension"],
+        "Barbells": [
+            "Barbell Bench Press",
+            "Barbell Shoulder Press",
+            "Barbell Rows",
+            "Barbell Bicep Curl",
+        ],
+        "Kettlebells": [
+            "Kettlebell Shoulder Press",
+            "Kettlebell Rows",
+            "Kettlebell Tricep Extension",
+            "Kettlebell Chest Press",
+            "Kettlebell Windmill",
+        ],
+        "Resistance Bands": [
+            "Band Pull-Apart",
+            "Band Chest Press",
+            "Band Rows",
+            "Band Bicep Curl",
+            "Band Tricep Pushdown",
+        ],
     },
     "Lower Body": {
-        "Bodyweight": ["Squats", "Lunges", "Wall Sit", "Bicycle Crunches"],
-        "Dumbbells": ["Dumbbell Squat", "Dumbbell Lunges", "Dumbbell Deadlift"],
+        "Bodyweight": [
+            "Bodyweight Squats",
+            "Lunges",
+            "Wall Sit",
+            "Glute Bridge",
+            "Step-ups",
+        ],
+        "Dumbbells": [
+            "Dumbbell Squat",
+            "Dumbbell Lunges",
+            "Dumbbell Deadlift",
+            "Dumbbell Step-ups",
+            "Dumbbell Goblet Squat",
+            "Dumbbell Bulgarian Split Squat",
+            "Dumbbell Calf Raise",
+        ],
         "Barbells": ["Barbell Squats", "Barbell Deadlift", "Barbell Lunges"],
-        "Kettlebells": ["Kettlebell Goblet Squat", "Kettlebell Deadlift", "Kettlebell Lunges"],
+        "Kettlebells": [
+            "Kettlebell Goblet Squat",
+            "Kettlebell Deadlift",
+            "Kettlebell Lunges",
+            "Kettlebell Step-ups",
+            "Kettlebell Pistol Squat",
+        ],
+        "Resistance Bands": [
+            "Band Squat",
+            "Band Lunges",
+            "Band Deadlift",
+            "Band Kickbacks",
+            "Band Glute Bridge",
+        ],
     },
     "Full Body": {
-        "Bodyweight": ["Burpees", "Mountain Climbers", "Jumping Jacks"],
-        "Dumbbells": ["Dumbbell Clean and Press"],
-        "Barbells": ["Barbell Clean and Press"],
-        "Kettlebells": ["Kettlebell Clean and Press", "Kettlebell Swing", "Kettlebell Snatch"],
+        "Bodyweight": [
+            "Burpees",
+            "Mountain Climbers",
+            "Jumping Jacks",
+            "Bear Crawl",
+            "Squat Jumps",
+        ],
+        "Dumbbells": [
+            "Dumbbell Clean and Press",
+            "Dumbbell Snatch",
+            "Dumbbell Turkish Get-up",
+            "Dumbbell Thruster",
+            "Dumbbell Burpee",
+        ],
+        "Barbells": ["Barbell Clean and Press", "Barbell Snatch"],
+        "Kettlebells": [
+            "Kettlebell Clean and Press",
+            "Kettlebell Swing",
+            "Kettlebell Snatch",
+            "Kettlebell Turkish Get-up",
+            "Kettlebell Figure-8",
+        ],
     },
-    "Cardio": {"Cardio": ["Cycling", "Running", "Jogging"]},
+    "Cardio": {
+        "Cardio": [
+            "Running",
+            "Cycling",
+            "Jump Rope",
+            "Swimming",
+            "Rowing",
+            "High Knees",
+            "Box Jumps",
+        ]
+    },
     "Yoga": {
         "Yoga/Stretching": [
             "Downward Dog",
@@ -54,72 +140,159 @@ EXERCISE_CATEGORIES = {
 }
 
 
+def generate_workout(fitness_goal, experience_level, equipment):
+    # Sets and reps configuration based on experience level
+    sets, reps, rest_period, additional_exercises = 2, 10, 60, 0
+    supersets, tempo_control, pyramid_sets = False, False, False
+
+    # Modify intensity based on experience level
+    if experience_level == "Beginner":
+        sets, reps, rest_period = 2, 10, 60
+    elif experience_level == "Intermediate":
+        sets, reps, rest_period = 3, 8, 45
+        supersets = True
+        additional_exercises = 1
+    elif experience_level == "Advanced":
+        sets, reps, rest_period = 4, 6, 30
+        supersets = True
+        tempo_control = True
+        additional_exercises = 2
+        pyramid_sets = True  # Add pyramid-style training for advanced users
+
+    workout_plan = []
+    day_count = 1
+
+    # Helper to generate exercises based on categories and equipment
+    def generate_day_plan(day_type):
+        exercises = []
+        for equip in equipment:
+            exercises += EXERCISE_CATEGORIES[day_type].get(equip, [])
+
+        # Add additional exercises for intermediate/advanced users
+        exercises = random.sample(
+            exercises, min(4 + additional_exercises, len(exercises))
+        )
+
+        # Apply advanced techniques for advanced users
+        if supersets:
+            exercises = [
+                f"{ex1} + {ex2} 🔴" for ex1, ex2 in zip(exercises[::2], exercises[1::2])
+            ]
+        if tempo_control:
+            exercises = [f"{ex} 🟠" for ex in exercises]
+        if pyramid_sets:
+            exercises = [f"{ex} 🔵" for ex in exercises]
+
+        return exercises
+
+    # Upper Body Day
+    upper_body_exercises = generate_day_plan("Upper Body")
+    workout_plan.append(
+        {
+            "Day": f"Day {day_count}: Upper Body",
+            "Exercises": upper_body_exercises,
+            "Sets": sets,
+            "Reps": reps,
+            "Rest Period": rest_period,
+        }
+    )
+    day_count += 1
+
+    # Lower Body Day
+    lower_body_exercises = generate_day_plan("Lower Body")
+    workout_plan.append(
+        {
+            "Day": f"Day {day_count}: Lower Body",
+            "Exercises": lower_body_exercises,
+            "Sets": sets,
+            "Reps": reps,
+            "Rest Period": rest_period,
+        }
+    )
+    day_count += 1
+
+    # Full Body Day
+    full_body_exercises = generate_day_plan("Full Body")
+    workout_plan.append(
+        {
+            "Day": f"Day {day_count}: Full Body",
+            "Exercises": full_body_exercises,
+            "Sets": sets,
+            "Reps": reps,
+            "Rest Period": rest_period,
+        }
+    )
+    day_count += 1
+
+    # Cardio/Rest Day (Optional for Advanced)
+    if (
+        fitness_goal in ["Lose Weight", "Increase Endurance"]
+        or experience_level != "Beginner"
+    ):
+        cardio_exercises = random.sample(EXERCISE_CATEGORIES["Cardio"]["Cardio"], 2)
+        yoga_exercises = random.sample(
+            EXERCISE_CATEGORIES["Yoga"]["Yoga/Stretching"], 2
+        )
+        workout_plan.append(
+            {
+                "Day": f"Day {day_count}: Cardio & Yoga",
+                "Exercises": cardio_exercises + yoga_exercises,
+                "Rest Period": 30,
+            }
+        )
+
+    # Optional advanced days for upper and lower body
+    if experience_level != "Beginner":
+        # Upper Body 2
+        upper_body_exercises_2 = generate_day_plan("Upper Body")
+        workout_plan.append(
+            {
+                "Day": f"Day {day_count + 1}: Upper Body 2",
+                "Exercises": upper_body_exercises_2,
+                "Sets": sets,
+                "Reps": reps,
+                "Rest Period": rest_period,
+            }
+        )
+        day_count += 1
+
+        # Lower Body 2
+        lower_body_exercises_2 = generate_day_plan("Lower Body")
+        workout_plan.append(
+            {
+                "Day": f"Day {day_count + 1}: Lower Body 2",
+                "Exercises": lower_body_exercises_2,
+                "Sets": sets,
+                "Reps": reps,
+                "Rest Period": rest_period,
+            }
+        )
+
+    # Save workout plan to session
+    session["generated_plan"] = workout_plan
+    session["current_day"] = 0  # Start from Day 1
+
+    return workout_plan
+
+
 @app.route("/generate-fitness-plan", methods=["POST"])
 def generate_fitness_plan():
-    # Capture form data
+    # Get form data
     fitness_goal = request.form.get("goal")
     experience_level = request.form.get("experience")
     equipment = request.form.getlist("equipment")
 
-    # Define sets and reps based on experience level
-    if experience_level == "Beginner":
-        sets = 2
-        reps = 10
-    elif experience_level == "Intermediate":
-        sets = 3
-        reps = 8
-    else:  # Advanced
-        sets = 4
-        reps = 6
+    # Generate workout plan using the advanced generator
+    workout_plan = generate_workout(fitness_goal, experience_level, equipment)
 
-    # Initialize the workout plan list
-    workout_plan = []
-
-    # Day 1: Upper Body
-    upper_body_exercises = []
-    for equip in equipment:
-        upper_body_exercises += EXERCISE_CATEGORIES["Upper Body"].get(equip, [])
-    upper_body_exercises = random.sample(upper_body_exercises, min(4, len(upper_body_exercises)))  # Limit to 4 exercises
-    workout_plan.append({"Day": "Day 1: Upper Body", "Exercises": upper_body_exercises, "Sets": sets, "Reps": reps})
-
-    # Day 2: Lower Body
-    lower_body_exercises = []
-    for equip in equipment:
-        lower_body_exercises += EXERCISE_CATEGORIES["Lower Body"].get(equip, [])
-    lower_body_exercises = random.sample(lower_body_exercises, min(4, len(lower_body_exercises)))  # Limit to 4 exercises
-    workout_plan.append({"Day": "Day 2: Lower Body", "Exercises": lower_body_exercises, "Sets": sets, "Reps": reps})
-
-    # Day 3: Full Body
-    full_body_exercises = []
-    for equip in equipment:
-        full_body_exercises += EXERCISE_CATEGORIES["Full Body"].get(equip, [])
-    full_body_exercises = random.sample(full_body_exercises, min(3, len(full_body_exercises)))  # Limit to 3 exercises
-    workout_plan.append({"Day": "Day 3: Full Body", "Exercises": full_body_exercises, "Sets": sets, "Reps": reps})
-
-    # Add Rest Day with Yoga & Stretching and Light Cardio
-    rest_day_exercises = []
-    yoga_exercises = EXERCISE_CATEGORIES["Yoga"]["Yoga/Stretching"]
-    rest_day_exercises += random.sample(yoga_exercises, min(3, len(yoga_exercises)))  # Limit to 3 yoga exercises
-
-    if fitness_goal in ["Lose Weight", "Increase Endurance"]:
-        cardio_exercises = EXERCISE_CATEGORIES["Cardio"]["Cardio"]
-        rest_day_exercises += random.sample(cardio_exercises, min(2, len(cardio_exercises)))  # Limit to 2 cardio exercises
-
-    workout_plan.append({"Day": "Rest Day: Yoga & Stretching + Cardio", "Exercises": rest_day_exercises})
-
-    # For more experienced users (Intermediate, Advanced), add additional workout days
-    if experience_level != "Beginner":
-        upper_body_exercises_2 = random.sample(upper_body_exercises, min(3, len(upper_body_exercises)))
-        lower_body_exercises_2 = random.sample(lower_body_exercises, min(3, len(lower_body_exercises)))
-        workout_plan.append({"Day": f"Day {len(workout_plan) + 1}: Upper Body 2", "Exercises": upper_body_exercises_2, "Sets": sets, "Reps": reps})
-        workout_plan.append({"Day": f"Day {len(workout_plan) + 1}: Lower Body 2", "Exercises": lower_body_exercises_2, "Sets": sets, "Reps": reps})
-
-    # Debugging: print the workout plan to the console
-    print(f"Generated Workout Plan: {workout_plan}")
-
-    # Render the template with the generated workout plan
+    # Render the fitness plan page with the generated workout plan
     return render_template("fitness-plan.html", generated_plan=workout_plan)
 
+
+# Route to display the form for creating the fitness plan
+@app.route("/fitness-plan-page", methods=["GET"])
+def fitness_plan_page():
+    return render_template("fitness-plan.html")
 
 
 def load_users():
@@ -141,7 +314,6 @@ def save_users(users):
         json.dump(users, file, indent=4)
 
 
-
 def load_database():
     try:
         with open("database.json", "r") as file:
@@ -159,118 +331,153 @@ def save_database(data):
 # Existing Routes
 @app.route("/")
 def index():
-    logged_in = 'user' in session
+    logged_in = "user" in session
     # Check if the user is logged in by looking for the 'user' key in the session
-    if 'user' in session:
+    if "user" in session:
         # The user is logged in, so they can see the full version of the page
         return render_template("index.html", logged_in=True)
     else:
         # The user is not logged in, show a restricted version of the page
         return render_template("index.html", logged_in=False)
 
+
 @app.route("/diet-plan-page")
 def diet_plan():
     return render_template("diet-plan.html")
 
-# Route to handle the form submission and generate the diet plan
-@app.route('/generate-diet-plan', methods=['POST'])
+@app.route("/generate-diet-plan", methods=["POST"])
 def generate_diet_plan():
-    # Collect user input from the form and print them for debugging
-    age = int(request.form['age'])
-    weight = float(request.form['weight'])
-    gender = request.form['gender']
-    activity_level = int(request.form['activity_level'])
-    goal = request.form['goal']
-    dietary_restrictions = request.form.get('dietary_restrictions', '')
-    allergies = request.form.get('allergies', '')
-    vegetarian = request.form.get('vegetarian') == 'Yes'  # Handle vegetarian preference
+    # Collect user input from the form
+    age = int(request.form["age"])
+    weight = float(request.form["weight"])
+    gender = request.form["gender"]
+    activity_level = int(request.form["activity_level"])
+    goal = request.form["goal"]
+    dietary_restrictions = request.form.get("dietary_restrictions", "")
+    vegetarian = request.form.get("vegetarian") == "Yes"  # Handle vegetarian preference
 
     # Debug: print user inputs to check if they are captured correctly
     print(f"Age: {age}, Weight: {weight}, Gender: {gender}, Activity Level: {activity_level}")
-    print(f"Goal: {goal}, Dietary Restrictions: {dietary_restrictions}, Allergies: {allergies}, Vegetarian: {vegetarian}")
+    print(f"Goal: {goal}, Dietary Restrictions: {dietary_restrictions}, Vegetarian: {vegetarian}")
 
-    # Generate the diet plan (assume handle_form_submission is working properly)
-    diet_plan, nutrients = handle_form_submission(age, weight, gender, activity_level, goal, dietary_restrictions, allergies, vegetarian)
+    # Generate the diet plan (using your handle_form_submission function)
+    diet_plan, nutrients = handle_form_submission(
+        age,
+        weight,
+        gender,
+        activity_level,
+        goal,
+        dietary_restrictions,
+        vegetarian
+    )
 
     # Debug: print diet plan and nutrients to check if they are generated correctly
     print(f"Diet Plan: {diet_plan}")
     print(f"Nutrients: {nutrients}")
 
     # Render the diet plan page with the generated diet plan
-    return render_template('diet-plan.html', diet_plan=diet_plan, nutrients=nutrients)
+    return render_template("diet-plan.html", diet_plan=diet_plan, nutrients=nutrients)
 
 
-@app.route("/fitness-plan-page")
-def fitness_plan_page():
-    return render_template("fitness-plan.html")
+
+@app.route("/log-workout-page", methods=["GET", "POST"])
+def log_workout():
+    database = load_database()
+
+    if request.method == "POST":
+        weight = request.form.get("weight")
+        duration = request.form.get("duration")
+        exercises = request.form.getlist("exercise")
+
+        # MET value: assume moderate intensity for now
+        MET_value = 5
+
+        # Calories burned calculation (basic formula)
+        try:
+            weight = float(weight)
+            duration = int(duration)
+            calories_burned = (MET_value * weight * 3.5 / 200) * duration
+        except ValueError:
+            return "Invalid input", 400  # Handle invalid inputs gracefully
+
+        # Create a new workout entry with calories burned
+        new_workout = {
+            "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "weight": weight,
+            "duration": duration,
+            "exercises": exercises,
+            "calories_burned": round(
+                calories_burned, 2
+            ),  # This line ensures calories are recorded
+            "notes": request.form.get("notes", ""),
+        }
+
+        # Add new workout to the database and save it
+        database["workouts"].append(new_workout)
+        save_database(database)
+
+        # Increment the day index after logging the workout
+        session["current_day"] = session.get("current_day", 0) + 1
+
+        # Redirect to the same form page after submission
+        return redirect(url_for("log_workout"))
+
+    # For GET requests, render the log workout page
+    # Fetch the current day’s exercises from the fitness plan
+    generated_plan = session.get("generated_plan", [])
+    current_day = session.get("current_day", 0)
+
+    # Ensure we don't go out of bounds with the current day index
+    if current_day >= len(generated_plan):
+        current_day = len(generated_plan) - 1  # Stay on the last day
+
+    # Get the exercises for the current day
+    day_plan = generated_plan[current_day]
+    exercises = day_plan["Exercises"]
+
+    return render_template("log-workout.html", exercises=exercises, day=day_plan["Day"])
 
 
 @app.route("/progress-page")
 def progress_page():
-    database = load_database()
+    database = load_database()  # Load the database
 
-    # Ensure that workouts, body_measurements, and goal_progress exist in the database
+    # Retrieve workout data
     workouts = database.get("workouts", [])
-    body_measurements = database.get(
-        "body_measurements", [70, 68, 66, 65]
-    )  # Default example values
-    goal_progress = database.get("goal_progress", [75, 25])  # Default 75% complete
 
-    if not workouts:
-        total_workout_time = 0
-        workout_data = []
+    # Safely calculate total calories burned
+    total_calories_burned = sum(
+        workout.get("calories_burned", 0) for workout in workouts
+    )
+
+    # Sum total workout time
+    total_workout_time = sum(workout.get("duration", 0) for workout in workouts)
+
+    # Get last 7 workout durations
+    if workouts:
+        recent_workouts = workouts[-7:]  # Get the last 7 workouts
+        workout_durations = [workout.get("duration", 0) for workout in recent_workouts]
     else:
-        total_workout_time = sum(workout.get("duration", 0) for workout in workouts)
-        recent_workouts = workouts[-7:]
-        workout_data = [workout.get("duration", 0) for workout in recent_workouts]
+        workout_durations = [0] * 7  # Default to 0 if no data
+
+    # Get latest body weight (from the last logged workout)
+    body_weight = (
+        workouts[-1]["weight"] if workouts else 70
+    )  # Default to 70 if no workout data
+    body_measurements = (
+        [workout["weight"] for workout in workouts[-4:]] if workouts else []
+    )  # Last 4 weight entries for the line graph
 
     return render_template(
         "progress.html",
         total_workout_time=total_workout_time,
-        workout_data=workout_data,
+        total_calories_burned=total_calories_burned,
+        workout_data=workout_durations,
+        body_weight=body_weight,
         body_measurements=body_measurements,
-        goal_progress=goal_progress,
-        workouts=workouts,
+        goal_progress=[80, 20],  # Example goal progress: 80% done
+        goal_completion=80,  # Assuming goal_progress[0] is the completion percentage
     )
-
-
-# Route to serve the form
-@app.route("/log-workout-page", methods=["GET"])
-def show_log_workout_page():
-    # Retrieve the exercises generated in the fitness plan, or use Bodyweight as the default
-    exercises = session.get("generated_exercises")
-
-    # Render the log workout page with the list of exercises
-    return render_template("log-workout.html", exercises=exercises)
-
-
-@app.route("/log-workout-page", methods=["POST"])
-def log_workout():
-    database = load_database()
-
-    # Retrieve form data
-    weight = request.form.get("weight")
-    duration = request.form.get("duration")
-    exercises = request.form.getlist("exercise")  # Get multiple checkbox values
-
-    # Create a new workout entry
-    try:
-        new_workout = {
-            "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "weight": float(weight),
-            "duration": int(duration),
-            "exercises": exercises,
-            "notes": request.form.get("notes", ""),
-        }
-    except ValueError:
-        return "Invalid input", 400  # Handle invalid inputs gracefully
-
-    # Add new workout to the database and save it
-    database["workouts"].append(new_workout)
-    save_database(database)
-
-    # Redirect to the same form page after submission
-    return redirect(url_for("show_log_workout_page"))
 
 
 @app.route("/signup-page", methods=["GET", "POST"])
@@ -321,13 +528,24 @@ def login_or_profile():
         error_message = "Email not found. Please try again."
         return render_template("login.html", error=error_message)
 
-
-    # Show profile if logged in
+    # Ensure that the data passed is serializable
     if "user" in session:
-        return render_template("profile.html", user=session["user"])
-    else:
-        # If not logged in, show login form
-        return render_template("login.html")
+        # Assuming you're passing user-specific data like stats
+        workout_data = [30, 45, 60, 40, 50, 70, 80]  # Example data
+        body_measurements = [70, 69, 68, 67]  # Example data
+        goal_progress = [80, 20]  # Example data
+
+        # Pass this data to the profile page
+        return render_template(
+            "profile.html",
+            user=session["user"],
+            workout_data=workout_data,
+            body_measurements=body_measurements,
+            goal_progress=goal_progress,
+        )
+
+    # If not logged in, show login form
+    return render_template("login.html")
 
 
 @app.route("/logout")
@@ -356,13 +574,16 @@ def load_community_database():
         # If the file is missing or empty/corrupt, return an empty structure
         return {"posts": []}
 
+
 def save_community_database(data):
     with open("community_database.json", "w") as file:
         json.dump(data, file, indent=4)
 
 
+next_post_id = (
+    2  # This can be dynamically set by checking the highest ID in the file if needed
+)
 
-next_post_id = 2  # This can be dynamically set by checking the highest ID in the file if needed
 
 # Route to display the community page with blog posts
 @app.route("/community-page")
@@ -370,8 +591,9 @@ def community_page():
     # Load posts from the community database
     database = load_community_database()
     posts = database.get("posts", [])
-    
+
     return render_template("community.html", posts=posts)
+
 
 # Route to create a new post
 @app.route("/create-post", methods=["GET", "POST"])
@@ -401,8 +623,9 @@ def create_post():
         save_community_database(database)
 
         return redirect(url_for("community_page"))
-    
+
     return render_template("create-post.html")
+
 
 # Route to view post details including comments
 @app.route("/post/<int:post_id>")
@@ -414,6 +637,7 @@ def post_detail(post_id):
     if post:
         return render_template("post-detail.html", post=post)
     return "Post not found", 404
+
 
 # Route to add a comment to a post
 @app.route("/add-comment/<int:post_id>", methods=["POST"])

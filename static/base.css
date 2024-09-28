@@ -10,6 +10,7 @@ body {
   background-color: #f4f4f4;
   color: #333;
   line-height: 1.6;
+  font-size: 18px;  /* Increased the base font size from default (16px) */
 }
 
 /* Typography */
@@ -29,6 +30,7 @@ input,
 button,
 textarea {
   font-family: "Raleway", sans-serif;
+  font-size: 1.1rem;  /* Slightly larger font size for common text elements */
 }
 
 /* Keep Bebas Neue for the logo */
@@ -53,10 +55,11 @@ header {
 }
 
 .logo h1 {
-  font-size: 1.5rem;
+  font-size: 1.8rem;  /* Slightly larger logo font */
   color: black;
 }
-.logo_image{
+
+.logo_image {
   width: 100px;
   height: 50px;
 }
