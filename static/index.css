@@ -69,33 +69,6 @@
   background-color: #218838;
 }
 
-/* About Section */
-.about {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 40px;
-  background-color: white;
-}
-
-.about-text {
-  width: 30%;
-  padding-right: 20px;
-  margin-left: 10%;
-}
-
-.about-image {
-  width: 30%;
-  padding-left: 20px;
-  margin-right: 10%;
-}
-
-.about-image img {
-  width: 100%;
-  max-width: 100%;
-  border-radius: 13px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
 
 /* Feature Summary Section */
 .feature-summary {
@@ -175,4 +148,20 @@ form input[type="submit"] {
 
 form input[type="submit"]:hover {
   background-color: #218838;
+}
+
+.tiles {
+  width: 600px;
+  font-size: 0;
+  margin: 0 auto;
+  margin-left: 35%;
+}
+
+.tile {
+  width: calc(600px / 2);
+  display: inline-block;
+}
+
+.tile h2 {
+  font-size: 20px;
 }
