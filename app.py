@@ -156,7 +156,14 @@ def save_database(data):
 # Existing Routes
 @app.route("/")
 def index():
-    return render_template("index.html")
+    logged_in = 'user' in session
+    # Check if the user is logged in by looking for the 'user' key in the session
+    if 'user' in session:
+        # The user is logged in, so they can see the full version of the page
+        return render_template("index.html", logged_in=True)
+    else:
+        # The user is not logged in, show a restricted version of the page
+        return render_template("index.html", logged_in=False)
 
 @app.route("/diet-plan-page")
 def diet_plan():
