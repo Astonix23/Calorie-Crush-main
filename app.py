@@ -528,21 +528,40 @@ def login_or_profile():
         error_message = "Email not found. Please try again."
         return render_template("login.html", error=error_message)
 
-    # Ensure that the data passed is serializable
     if "user" in session:
-        # Assuming you're passing user-specific data like stats
-        workout_data = [30, 45, 60, 40, 50, 70, 80]  # Example data
-        body_measurements = [70, 69, 68, 67]  # Example data
-        goal_progress = [80, 20]  # Example data
+        # Load workout data from the database
+        database = load_database()
+        workouts = database.get("workouts", [])
 
-        # Pass this data to the profile page
+        # Get workout durations for the last 7 days
+        if workouts:
+            recent_workouts = workouts[-7:]  # Get the last 7 workouts
+            workout_durations = [workout.get("duration", 0) for workout in recent_workouts]
+            workout_dates = [workout.get("date", "Unknown") for workout in recent_workouts]
+        else:
+            workout_durations = [0] * 7  # Default to 0 if no data
+            workout_dates = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"]
+
+        # Retrieve weight data for the last few entries (or log)
+        if workouts:
+            # Get the last 7 weight logs
+            weight_progress = [workout.get("weight", 0) for workout in workouts[-7:]]
+            weight_dates = [workout.get("date", "Unknown") for workout in workouts[-7:]]
+        else:
+            weight_progress = [70, 69, 68, 67, 66, 65, 64]  # Example default data
+            weight_dates = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"]
+
+        # Render the profile page with the workout and weight progress data
         return render_template(
             "profile.html",
             user=session["user"],
-            workout_data=workout_data,
-            body_measurements=body_measurements,
-            goal_progress=goal_progress,
+            workout_data=workout_durations,  # Data for weekly workout durations
+            workout_dates=workout_dates,  # Dates for the workout logs
+            weight_progress=weight_progress,  # Data for weight progress
+            weight_dates=weight_dates,  # Dates for the weight logs
         )
+
+    return render_template("login.html")
 
     # If not logged in, show login form
     return render_template("login.html")

@@ -1,12 +1,4 @@
-/* General Layout */
-body {
-  font-family: "Raleway", sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
-  line-height: 1.6;
-  margin: 0;
-  padding: 0;
-}
+
 
 #dashboard {
   display: flex;
@@ -106,16 +98,50 @@ canvas.line-graph {
   font-size: 1rem; /* Consistent font size for all legends */
   text-align: center;
 }
-
-/* Footer */
-footer {
-  background-color: #333;
-  color: white;
-  padding: 20px 0;
-  text-align: center;
+header {
+  background-color: #fff;
+  border-bottom: 2px solid #ddd;
+  padding: 10px 0;
+  height: auto;
 }
 
-footer p {
-  margin: 0;
-  font-size: 1rem;
+.container {
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo_image {
+  width: 80px;  /* Adjusted size */
+  height: auto;  /* Maintain aspect ratio */
+  margin-right: 10px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;  /* Adjusted spacing between menu items */
+}
+
+nav ul li a {
+  font-size: 1.1rem;  /* Adjusted font size */
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  padding: 10px 15px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #28a745;
+  background-color: rgba(40, 167, 69, 0.1);
+  border-radius: 5px;
+}
+

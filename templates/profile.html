@@ -11,7 +11,6 @@
       href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;700&display=swap"
       rel="stylesheet"
     />
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profile</title>
@@ -26,7 +25,9 @@
           <div class="bebas logo">
             <nav>
               <ul>
-                <li><img src="static/logo.png" alt="Calorie Crush Logo" class="logo_image" /></li>
+                <li>
+                  <img src="static/logo.png" alt="Calorie Crush Logo" class="logo_image" />
+                </li>
                 <li><h1 style="font-size: 30px">CALORIE CRUSH</h1></li>
               </ul>
             </nav>
@@ -70,17 +71,22 @@
         <div class="stats-glimpse">
           <h2>Your Stats</h2>
           <div class="circular-stats">
+            <!-- Total Workouts -->
             <div class="stat-chart">
               <h3>Total Workouts</h3>
               <canvas id="workoutChart"></canvas>
             </div>
+
+            <!-- Goal Progress -->
             <div class="stat-chart">
               <h3>Goal Progress</h3>
               <canvas id="goalChart"></canvas>
             </div>
+
+            <!-- Recent Workouts -->
             <div class="stat-chart">
               <h3>Recent Workouts</h3>
-              <canvas id="recentWorkoutsChart"></canvas>
+              <canvas id="recentWorkoutsChart" style="width: 100%; height: auto;"></canvas>
             </div>
           </div>
         </div>
@@ -94,56 +100,106 @@
 
       <!-- Chart.js Script -->
       <script>
-        // Chart configuration options
         const chartOptions = {
           responsive: true,
           maintainAspectRatio: true,
           plugins: {
-            legend: { display: false },
-            tooltip: { backgroundColor: '#333', titleColor: '#fff', bodyColor: '#fff' }
+            legend: { display: true, position: 'top' },
+            tooltip: {
+              backgroundColor: '#333',
+              titleColor: '#fff',
+              bodyColor: '#fff'
+            }
           }
         };
 
-        // Total Workouts Chart
+        // Total Workouts Chart (Doughnut)
         const ctxWorkout = document.getElementById('workoutChart').getContext('2d');
         new Chart(ctxWorkout, {
           type: 'doughnut',
           data: {
             labels: ['Completed', 'Remaining'],
             datasets: [{
-              data: [75, 25], // Example: 75% completed
+              data: [75, 25],  // Example data (replace with dynamic data)
               backgroundColor: ['#28a745', '#ddd']
             }]
           },
           options: chartOptions
         });
 
-        // Goal Progress Chart
+        // Goal Progress Chart (Doughnut)
         const ctxGoal = document.getElementById('goalChart').getContext('2d');
         new Chart(ctxGoal, {
           type: 'doughnut',
           data: {
             labels: ['Achieved', 'Pending'],
             datasets: [{
-              data: [60, 40], // Example: 60% achieved
+              data: [60, 40],  // Example data (replace with dynamic data)
               backgroundColor: ['#28a745', '#ddd']
             }]
           },
           options: chartOptions
         });
 
-        // Recent Workouts Chart
+        // High-quality Recent Workouts Chart (Bar Chart)
         const ctxRecent = document.getElementById('recentWorkoutsChart').getContext('2d');
         new Chart(ctxRecent, {
-          type: 'doughnut',
+          type: 'bar',
           data: {
-            labels: ['Completed', 'Remaining'],
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],  // Data reference
             datasets: [{
-              data: [5, 2], // Example: 5 completed workouts, 2 remaining
-              backgroundColor: ['#28a745', '#ddd']
+              label: '',  // No label for the dataset
+              data: [30, 40, 20, 50, 60, 45, 35],  // Example data (replace with dynamic data)
+              backgroundColor: '#28a745',
+              borderColor: '#28a745',
+              borderWidth: 1  // Thicker borders for high-quality
             }]
           },
-          options: chartOptions
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+              x: {
+                display: false  // Hide day labels
+              },
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  font: {
+                    size: 14,  // Improved font size
+                    family: 'Raleway',  // Use a good web font
+                    weight: 'bold'
+                  }
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: false,  // Hide legend as it has no label
+              },
+              tooltip: {
+                backgroundColor: '#333',
+                titleColor: '#fff',
+                bodyColor: '#fff',
+                titleFont: {
+                  size: 16,  // Improve font size in tooltips
+                  family: 'Raleway',
+                  weight: 'bold'
+                },
+                bodyFont: {
+                  size: 14,  // Body font size in tooltips
+                  family: 'Raleway',
+                  weight: 'normal'
+                }
+              }
+            },
+            elements: {
+              bar: {
+                borderRadius: 4,  // Add rounded corners for a polished look
+                barThickness: 30  // Adjust bar thickness for better visibility
+              }
+            }
+          }
         });
       </script>
     </div>
