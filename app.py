@@ -347,7 +347,6 @@ posts = [
     }
 ]
 
-next_post_id = 2  # For generating post IDs
 
 def load_community_database():
     try:
@@ -363,49 +362,77 @@ def save_community_database(data):
 
 
 
+next_post_id = 2  # This can be dynamically set by checking the highest ID in the file if needed
+
+# Route to display the community page with blog posts
 @app.route("/community-page")
 def community_page():
+    # Load posts from the community database
+    database = load_community_database()
+    posts = database.get("posts", [])
+    
     return render_template("community.html", posts=posts)
 
-
+# Route to create a new post
 @app.route("/create-post", methods=["GET", "POST"])
 def create_post():
     global next_post_id
     if request.method == "POST":
-        title = request.form["title"]
-        content = request.form["content"]
-        author = request.form["author"]
+        title = request.form.get("title")
+        content = request.form.get("content")
+        author = request.form.get("author")
+
         new_post = {
             "id": next_post_id,
             "title": title,
-            "content": content,  # Ensure content is captured here
+            "content": content,
             "author": author,
             "comments": [],
         }
-        print(f"Title: {title}, Content: {content}, Author: {author}")
 
-        posts.append(new_post)
+        # Load the community database
+        database = load_community_database()
+
+        # Add the new post to the database
+        database["posts"].append(new_post)
         next_post_id += 1
+
+        # Save the updated community database
+        save_community_database(database)
+
         return redirect(url_for("community_page"))
+    
     return render_template("create-post.html")
 
-
+# Route to view post details including comments
 @app.route("/post/<int:post_id>")
 def post_detail(post_id):
-    post = next((p for p in posts if p["id"] == post_id), None)
+    # Load posts from the community database
+    database = load_community_database()
+    post = next((p for p in database["posts"] if p["id"] == post_id), None)
+
     if post:
         return render_template("post-detail.html", post=post)
     return "Post not found", 404
 
-
+# Route to add a comment to a post
 @app.route("/add-comment/<int:post_id>", methods=["POST"])
 def add_comment(post_id):
     author = request.form["author"]
     comment = request.form["comment"]
-    for post in posts:
+
+    # Load the community database
+    database = load_community_database()
+
+    # Find the correct post and append the comment
+    for post in database["posts"]:
         if post["id"] == post_id:
             post["comments"].append({"author": author, "comment": comment})
             break
+
+    # Save the updated community database
+    save_community_database(database)
+
     return redirect(url_for("post_detail", post_id=post_id))
 
 
