@@ -5,6 +5,8 @@ from datetime import datetime
 import random
 from diet_plan_gen import *
 
+
+# Setup flask
 app = Flask(__name__)
 app.secret_key = "\xae7)\xa0\n\xb9J\xa4\xe3\x9aD\xd6\xb0$&\xad\x1b\x8a\xc6z\x1d%V\xbe"
 
@@ -138,6 +140,7 @@ EXERCISE_CATEGORIES = {
     },
 }
 
+# Creates workout program based on fitness goal, experience level, and equipment available
 def generate_workout(fitness_goal, experience_level, equipment):
     sets, reps, rest_period, additional_exercises = 2, 10, 60, 0
     supersets, tempo_control, pyramid_sets = False, False, False
@@ -259,6 +262,8 @@ def generate_workout(fitness_goal, experience_level, equipment):
 
     return workout_plan
 
+
+# Handles HTML and calls generate_workout function
 @app.route("/generate-fitness-plan", methods=["POST"])
 def generate_fitness_plan():
     fitness_goal = request.form.get("goal")
@@ -271,6 +276,7 @@ def generate_fitness_plan():
 def fitness_plan_page():
     return render_template("fitness-plan.html")
 
+# Loads users from database
 def load_users():
     try:
         with open("users.json", "r") as file:
@@ -281,10 +287,12 @@ def load_users():
     except (FileNotFoundError, json.JSONDecodeError):
         return {"users": []}
 
+# Save users to database
 def save_users(users):
     with open("users.json", "w") as file:
         json.dump(users, file, indent=4)
 
+# Load database for workouts
 def load_database():
     try:
         with open("database.json", "r") as file:
@@ -292,10 +300,12 @@ def load_database():
     except FileNotFoundError:
         return {"workouts": []}
 
+# Saves workout data to database
 def save_database(data):
     with open("database.json", "w") as file:
         json.dump(data, file, indent=4)
 
+# Home flask route
 @app.route("/")
 def index():
     logged_in = "user" in session
@@ -304,10 +314,12 @@ def index():
     else:
         return render_template("index.html", logged_in=False)
 
+# Diet-plan flask route
 @app.route("/diet-plan-page")
 def diet_plan():
     return render_template("diet-plan.html")
 
+# Handles form submission
 @app.route("/generate-diet-plan", methods=["POST"])
 def generate_diet_plan():
     age = int(request.form["age"])
@@ -328,6 +340,7 @@ def generate_diet_plan():
     )
     return render_template("diet-plan.html", diet_plan=diet_plan, nutrients=nutrients)
 
+# Log-workout flask route
 @app.route("/log-workout-page", methods=["GET", "POST"])
 def log_workout():
     database = load_database()
@@ -364,6 +377,7 @@ def log_workout():
     exercises = day_plan["Exercises"]
     return render_template("log-workout.html", exercises=exercises, day=day_plan["Day"])
 
+# Progress flask route
 @app.route("/progress-page")
 def progress_page():
     database = load_database()
@@ -394,6 +408,7 @@ def progress_page():
         goal_completion=80,
     )
 
+# Signup page flask route
 @app.route("/signup-page", methods=["GET", "POST"])
 def signup_page():
     if request.method == "POST":
@@ -414,6 +429,7 @@ def signup_page():
         return redirect(url_for("login_or_profile"))
     return render_template("signup.html")
 
+# Shows login page or profile page based on whether the user is logged in or not
 @app.route("/login-profile-page", methods=["GET", "POST"])
 def login_or_profile():
     if request.method == "POST":
@@ -456,6 +472,7 @@ def login_or_profile():
         )
     return render_template("login.html")
 
+# Logout flask route
 @app.route("/logout")
 def logout():
     session.pop("user", None)
@@ -471,6 +488,7 @@ posts = [
     }
 ]
 
+# Loads blogs and comments from database
 def load_community_database():
     try:
         with open("community_database.json", "r") as file:
@@ -484,12 +502,14 @@ def save_community_database(data):
 
 next_post_id = 2
 
+# Community page flask route
 @app.route("/community-page")
 def community_page():
     database = load_community_database()
     posts = database.get("posts", [])
     return render_template("community.html", posts=posts)
 
+#  Create post flask route
 @app.route("/create-post", methods=["GET", "POST"])
 def create_post():
     global next_post_id
@@ -511,6 +531,7 @@ def create_post():
         return redirect(url_for("community_page"))
     return render_template("create-post.html")
 
+# Shows post detail
 @app.route("/post/<int:post_id>")
 def post_detail(post_id):
     database = load_community_database()
@@ -519,6 +540,7 @@ def post_detail(post_id):
         return render_template("post-detail.html", post=post)
     return "Post not found", 404
 
+# Flask route for adding comments
 @app.route("/add-comment/<int:post_id>", methods=["POST"])
 def add_comment(post_id):
     author = request.form["author"]
@@ -531,6 +553,7 @@ def add_comment(post_id):
     save_community_database(database)
     return redirect(url_for("post_detail", post_id=post_id))
 
+# Loads contact us page
 @app.route("/contact-us-page")
 def contact_us_page():
     return render_template("contact-us.html")
