@@ -8,6 +8,9 @@ from diet_plan_gen import *
 app = Flask(__name__)
 app.secret_key = "\xae7)\xa0\n\xb9J\xa4\xe3\x9aD\xd6\xb0$&\xad\x1b\x8a\xc6z\x1d%V\xbe"
 
+COMMUNITY_DB_FILE = "community_database.json"
+
+
 
 EXERCISE_CATEGORIES = {
     "Upper Body": {
@@ -346,6 +349,19 @@ posts = [
 
 next_post_id = 2  # For generating post IDs
 
+def load_community_database():
+    try:
+        with open("community_database.json", "r") as file:
+            return json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        # If the file is missing or empty/corrupt, return an empty structure
+        return {"posts": []}
+
+def save_community_database(data):
+    with open("community_database.json", "w") as file:
+        json.dump(data, file, indent=4)
+
+
 
 @app.route("/community-page")
 def community_page():
@@ -362,10 +378,12 @@ def create_post():
         new_post = {
             "id": next_post_id,
             "title": title,
-            "content": content,
+            "content": content,  # Ensure content is captured here
             "author": author,
             "comments": [],
         }
+        print(f"Title: {title}, Content: {content}, Author: {author}")
+
         posts.append(new_post)
         next_post_id += 1
         return redirect(url_for("community_page"))
