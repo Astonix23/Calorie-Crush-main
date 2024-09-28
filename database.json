@@ -1,71 +1,99 @@
 {
     "workouts": [
-      {
-        "date": "2024-09-01 10:00:00",
-        "weight": 70,
-        "duration": 45,
-        "exercises": ["Running", "Push-ups"],
-        "calories_burned": 350,
-        "notes": "Felt good!"
-      },
-      {
-        "date": "2024-09-02 11:00:00",
-        "weight": 70,
-        "duration": 30,
-        "exercises": ["Cycling", "Plank"],
-        "calories_burned": 250,
-        "notes": "Need to improve my cycling."
-      },
-      {
-        "date": "2024-09-03 09:30:00",
-        "weight": 70,
-        "duration": 60,
-        "exercises": ["Swimming"],
-        "calories_burned": 500,
-        "notes": "Great swim today!"
-      },
-      {
-        "date": "2024-09-04 08:00:00",
-        "weight": 70,
-        "duration": 50,
-        "exercises": ["Yoga"],
-        "calories_burned": 200,
-        "notes": "Relaxing session."
-      },
-      {
-        "date": "2024-09-05 10:15:00",
-        "weight": 70,
-        "duration": 40,
-        "exercises": ["Weightlifting", "Squats"],
-        "calories_burned": 300,
-        "notes": "Heavy lifting today."
-      },
-      {
-        "date": "2024-09-06 07:45:00",
-        "weight": 70,
-        "duration": 35,
-        "exercises": ["HIIT"],
-        "calories_burned": 400,
-        "notes": "Intense workout!"
-      },
-      {
-        "date": "2024-09-07 18:00:00",
-        "weight": 70,
-        "duration": 25,
-        "exercises": ["Walking"],
-        "calories_burned": 100,
-        "notes": "Nice evening walk."
-      }
+        {
+            "date": "2024-09-01 10:00:00",
+            "weight": 70,
+            "duration": 45,
+            "exercises": [
+                "Running",
+                "Push-ups"
+            ],
+            "calories_burned": 350,
+            "notes": "Felt good!"
+        },
+        {
+            "date": "2024-09-02 11:00:00",
+            "weight": 70,
+            "duration": 30,
+            "exercises": [
+                "Cycling",
+                "Plank"
+            ],
+            "calories_burned": 250,
+            "notes": "Need to improve my cycling."
+        },
+        {
+            "date": "2024-09-03 09:30:00",
+            "weight": 70,
+            "duration": 60,
+            "exercises": [
+                "Swimming"
+            ],
+            "calories_burned": 500,
+            "notes": "Great swim today!"
+        },
+        {
+            "date": "2024-09-04 08:00:00",
+            "weight": 70,
+            "duration": 50,
+            "exercises": [
+                "Yoga"
+            ],
+            "calories_burned": 200,
+            "notes": "Relaxing session."
+        },
+        {
+            "date": "2024-09-05 10:15:00",
+            "weight": 70,
+            "duration": 40,
+            "exercises": [
+                "Weightlifting",
+                "Squats"
+            ],
+            "calories_burned": 300,
+            "notes": "Heavy lifting today."
+        },
+        {
+            "date": "2024-09-06 07:45:00",
+            "weight": 70,
+            "duration": 35,
+            "exercises": [
+                "HIIT"
+            ],
+            "calories_burned": 400,
+            "notes": "Intense workout!"
+        },
+        {
+            "date": "2024-09-07 18:00:00",
+            "weight": 70,
+            "duration": 25,
+            "exercises": [
+                "Walking"
+            ],
+            "calories_burned": 100,
+            "notes": "Nice evening walk."
+        },
+        {
+            "date": "2024-09-28 21:05:21",
+            "weight": 70.0,
+            "duration": 45,
+            "exercises": [
+                "Dumbbell Tricep Kickback + Kettlebell Shoulder Press \ud83d\udd34 \ud83d\udfe0 \ud83d\udd35",
+                "Decline Pushups + Dumbbell Bench Press \ud83d\udd34 \ud83d\udfe0 \ud83d\udd35",
+                "Kettlebell Tricep Extension + Kettlebell Chest Press \ud83d\udd34 \ud83d\udfe0 \ud83d\udd35"
+            ],
+            "calories_burned": 275.62,
+            "notes": "biucvadhoi"
+        }
     ],
     "body_measurements": [
-      70,
-      69.5,
-      69,
-      68.5
+        70,
+        69.5,
+        69,
+        68.5
     ],
     "goal_progress": [
-      80,
-      20
+        80,
+        20
     ]
-  }
-  
+}
